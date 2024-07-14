@@ -41,10 +41,24 @@ done
 
 if [[ $INSTALL == true ]]; then
   echo -e "${green}Installing PHP $VERSION...${reset}"
-  
-  mkdir -p $HOME/bin
-  mkdir -p $HOME/src
-  cd $HOME/src || { echo -e "${red}Error: Failed to navigate to $HOME/src directory${reset}"; exit 1; }
+
+  # Install dependencies if not already installed
+  dependencies=(
+    autoconf automake patchelf apache postgresql-libs unixodbc
+    libfbclient freetds tidy oniguruma aspell enchant libvoikko
+    hspell nuspell aspell
+  )
+
+  for dep in "${dependencies[@]}"; do
+    if ! pacman -Qs $dep > /dev/null; then
+      sudo pacman -S --needed --noconfirm $dep || { echo -e "${red}Error: Failed to install dependency $dep${reset}"; exit 1; }
+    fi
+  done
+
+  # Create directories if they do not exist
+  [[ ! -d "$HOME/bin" ]] && mkdir -p "$HOME/bin"
+  [[ ! -d "$HOME/src" ]] && mkdir -p "$HOME/src"
+  cd "$HOME/src" || { echo -e "${red}Error: Failed to navigate to $HOME/src directory${reset}"; exit 1; }
   
   REPO_URL="https://aur.archlinux.org/php$VERSION.git"
   if [[ -d "php$VERSION" ]]; then
@@ -54,8 +68,9 @@ if [[ $INSTALL == true ]]; then
   
   echo -e "${green}Cloning from $REPO_URL...${reset}"
   git clone $REPO_URL || { echo -e "${red}Error: Failed to clone repository from $REPO_URL${reset}"; exit 1; }
-  cd php$VERSION || { echo -e "${red}Error: Failed to navigate to php$VERSION directory${reset}"; exit 1; }
+  cd "php$VERSION" || { echo -e "${red}Error: Failed to navigate to php$VERSION directory${reset}"; exit 1; }
   
+  echo -e "${green}Starting the build process...${reset}"
   makepkg -si || { echo -e "${red}Error: Failed to build and install PHP $VERSION${reset}"; exit 1; }
   
   if [[ ! -x "$PHP_BIN" ]]; then
