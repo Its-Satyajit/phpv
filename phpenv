@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+# Enable debug mode if DEBUG is set
+[[ -n $DEBUG ]] && set -x
+
+red='\033[0;31m'
+green='\033[0;32m'
+reset='\033[0m'
+
+INSTALL=false
+VERSION=$1
+
+# Check if the -i flag is provided for installation
+if [[ $1 == "-i" ]]; then
+  INSTALL=true
+  VERSION=$2
+fi
+
+if [[ -z $VERSION ]]; then
+  echo -e "${red}Error: no version specified!${reset}"
+  echo -e "Usage: \`phpenv [VERSION]\` or \`phpenv -i [VERSION]\`"
+  echo -e "Example: \`phpenv 81\` or \`phpenv -i 83\`"
+  exit 1
+fi
+
+PHP_BIN="/usr/bin/php$VERSION"
+PHPIZE_BIN="/usr/bin/phpize$VERSION"
+PHP_FPM_BIN="/usr/bin/php-fpm$VERSION"
+PHP_DBG_BIN="/usr/bin/phpdbg$VERSION"
+PHP_CGI_BIN="/usr/bin/php-cgi$VERSION"
+PHP_PEAR_BIN="/usr/bin/pear$VERSION"
+PHP_PECL_BIN="/usr/bin/pecl$VERSION"
+
+# Check if required tools are installed
+for tool in git makepkg; do
+  if ! command -v $tool &> /dev/null; then
+    echo -e "${red}Error: $tool is not installed. Please install it and try again.${reset}"
+    exit 1
+  fi
+done
+
+if [[ $INSTALL == true ]]; then
+  echo -e "${green}Installing PHP $VERSION...${reset}"
+
+  mkdir -p $HOME/bin
+  mkdir -p $HOME/src
+  cd $HOME/src || { echo -e "${red}Error: Failed to navigate to $HOME/src directory${reset}"; exit 1; }
+
+  REPO_URL="https://aur.archlinux.org/php$VERSION.git"
+  if [[ -d "php$VERSION" ]]; then
+    echo -e "${red}Directory php$VERSION already exists. Removing it...${reset}"
+    rm -rf "php$VERSION" || { echo -e "${red}Error: Failed to remove existing directory php$VERSION${reset}"; exit 1; }
+  fi
+
+  echo -e "${green}Cloning from $REPO_URL...${reset}"
+  git clone $REPO_URL || { echo -e "${red}Error: Failed to clone repository from $REPO_URL${reset}"; exit 1; }
+  cd php$VERSION || { echo -e "${red}Error: Failed to navigate to php$VERSION directory${reset}"; exit 1; }
+
+  makepkg -si || { echo -e "${red}Error: Failed to build and install PHP $VERSION${reset}"; exit 1; }
+
+  if [[ ! -x "$PHP_BIN" ]]; then
+    echo -e "${red}Error: PHP $VERSION binary not found at $PHP_BIN after installation${reset}"
+    exit 1
+  fi
+fi
+
+# Check if PHP binaries exist for the specified version
+if [[ ! -x "$PHP_BIN" ]]; then
+  echo -e "${red}Error: PHP $VERSION binary not found at $PHP_BIN${reset}"
+  exit 1
+fi
+
+# Remove existing links before creating new ones
+for bin_link in php phpize php-fpm phpdbg php-cgi pear pecl; do
+  if [[ -L "$HOME/bin/$bin_link" ]]; then
+    rm -f "$HOME/bin/$bin_link" || { echo -e "${red}Error: Failed to remove existing link $HOME/bin/$bin_link${reset}"; exit 1; }
+  fi
+done
+
+# Create symbolic links
+ln -s "$PHP_BIN" "$HOME/bin/php" || { echo -e "${red}Error: Failed to create link for php${reset}"; exit 1; }
+ln -s "$PHPIZE_BIN" "$HOME/bin/phpize" || { echo -e "${red}Error: Failed to create link for phpize${reset}"; exit 1; }
+ln -s "$PHP_FPM_BIN" "$HOME/bin/php-fpm" || { echo -e "${red}Error: Failed to create link for php-fpm${reset}"; exit 1; }
+ln -s "$PHP_DBG_BIN" "$HOME/bin/phpdbg" || { echo -e "${red}Error: Failed to create link for phpdbg${reset}"; exit 1; }
+ln -s "$PHP_CGI_BIN" "$HOME/bin/php-cgi" || { echo -e "${red}Error: Failed to create link for php-cgi${reset}"; exit 1; }
+ln -s "$PHP_PEAR_BIN" "$HOME/bin/pear" || { echo -e "${red}Error: Failed to create link for pear${reset}"; exit 1; }
+ln -s "$PHP_PECL_BIN" "$HOME/bin/pecl" || { echo -e "${red}Error: Failed to create link for pecl${reset}"; exit 1; }
+
+echo -e "${green}Activated PHP $VERSION.${reset}"
+php -v
