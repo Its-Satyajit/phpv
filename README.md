@@ -91,7 +91,7 @@ phpenv [VERSION]
 Example:
 
 ```bash
-phpenv 81
+phpenv 83
 ```
 
 This command will create symbolic links in `$HOME/bin` pointing to the specified PHP version's binaries.

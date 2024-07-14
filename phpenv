@@ -19,7 +19,7 @@ fi
 if [[ -z $VERSION ]]; then
   echo -e "${red}Error: no version specified!${reset}"
   echo -e "Usage: \`phpenv [VERSION]\` or \`phpenv -i [VERSION]\`"
-  echo -e "Example: \`phpenv 81\` or \`phpenv -i 83\`"
+  echo -e "Example: \`phpenv 83\` or \`phpenv -i 83\`"
   exit 1
 fi
 
