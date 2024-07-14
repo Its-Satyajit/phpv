@@ -39,6 +39,11 @@ if [[ $INSTALL == true ]]; then
   cd $HOME/src
   
   REPO_URL="https://aur.archlinux.org/php$VERSION.git"
+  if [[ -d "php$VERSION" ]]; then
+    echo -e "${red}Directory php$VERSION already exists. Removing it...${reset}"
+    rm -rf "php$VERSION"
+  fi
+  
   echo -e "${green}Cloning from $REPO_URL...${reset}"
   git clone $REPO_URL
   cd php$VERSION
