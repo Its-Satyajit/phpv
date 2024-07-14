@@ -31,26 +31,32 @@ PHP_CGI_BIN="/usr/bin/php-cgi$VERSION"
 PHP_PEAR_BIN="/usr/bin/pear$VERSION"
 PHP_PECL_BIN="/usr/bin/pecl$VERSION"
 
+# Check if required tools are installed
+for tool in git makepkg; do
+  if ! command -v $tool &> /dev/null; then
+    echo -e "${red}Error: $tool is not installed. Please install it and try again.${reset}"
+    exit 1
+  fi
+done
+
 if [[ $INSTALL == true ]]; then
   echo -e "${green}Installing PHP $VERSION...${reset}"
   
   mkdir -p $HOME/bin
   mkdir -p $HOME/src
-  cd $HOME/src
+  cd $HOME/src || { echo -e "${red}Error: Failed to navigate to $HOME/src directory${reset}"; exit 1; }
   
   REPO_URL="https://aur.archlinux.org/php$VERSION.git"
   if [[ -d "php$VERSION" ]]; then
     echo -e "${red}Directory php$VERSION already exists. Removing it...${reset}"
-    rm -rf "php$VERSION"
+    rm -rf "php$VERSION" || { echo -e "${red}Error: Failed to remove existing directory php$VERSION${reset}"; exit 1; }
   fi
   
   echo -e "${green}Cloning from $REPO_URL...${reset}"
-  git clone $REPO_URL
-  cd php$VERSION
-  makepkg -si
+  git clone $REPO_URL || { echo -e "${red}Error: Failed to clone repository from $REPO_URL${reset}"; exit 1; }
+  cd php$VERSION || { echo -e "${red}Error: Failed to navigate to php$VERSION directory${reset}"; exit 1; }
   
-  # Wait a very long time (it literally compiles and installs php AND ALL MODULES)
-  # enter sudo password after the compile step is done
+  makepkg -si || { echo -e "${red}Error: Failed to build and install PHP $VERSION${reset}"; exit 1; }
   
   if [[ ! -x "$PHP_BIN" ]]; then
     echo -e "${red}Error: PHP $VERSION binary not found at $PHP_BIN after installation${reset}"
@@ -66,17 +72,19 @@ fi
 
 # Remove existing links before creating new ones
 for bin_link in php phpize php-fpm phpdbg php-cgi pear pecl; do
-  [[ -L "$HOME/bin/$bin_link" ]] && rm -f "$HOME/bin/$bin_link"
+  if [[ -L "$HOME/bin/$bin_link" ]]; then
+    rm -f "$HOME/bin/$bin_link" || { echo -e "${red}Error: Failed to remove existing link $HOME/bin/$bin_link${reset}"; exit 1; }
+  fi
 done
 
 # Create symbolic links
-ln -s "$PHP_BIN" "$HOME/bin/php"
-ln -s "$PHPIZE_BIN" "$HOME/bin/phpize"
-ln -s "$PHP_FPM_BIN" "$HOME/bin/php-fpm"
-ln -s "$PHP_DBG_BIN" "$HOME/bin/phpdbg"
-ln -s "$PHP_CGI_BIN" "$HOME/bin/php-cgi"
-ln -s "$PHP_PEAR_BIN" "$HOME/bin/pear"
-ln -s "$PHP_PECL_BIN" "$HOME/bin/pecl"
+ln -s "$PHP_BIN" "$HOME/bin/php" || { echo -e "${red}Error: Failed to create link for php${reset}"; exit 1; }
+ln -s "$PHPIZE_BIN" "$HOME/bin/phpize" || { echo -e "${red}Error: Failed to create link for phpize${reset}"; exit 1; }
+ln -s "$PHP_FPM_BIN" "$HOME/bin/php-fpm" || { echo -e "${red}Error: Failed to create link for php-fpm${reset}"; exit 1; }
+ln -s "$PHP_DBG_BIN" "$HOME/bin/phpdbg" || { echo -e "${red}Error: Failed to create link for phpdbg${reset}"; exit 1; }
+ln -s "$PHP_CGI_BIN" "$HOME/bin/php-cgi" || { echo -e "${red}Error: Failed to create link for php-cgi${reset}"; exit 1; }
+ln -s "$PHP_PEAR_BIN" "$HOME/bin/pear" || { echo -e "${red}Error: Failed to create link for pear${reset}"; exit 1; }
+ln -s "$PHP_PECL_BIN" "$HOME/bin/pecl" || { echo -e "${red}Error: Failed to create link for pecl${reset}"; exit 1; }
 
 echo -e "${green}Activated PHP $VERSION.${reset}"
 php -v
