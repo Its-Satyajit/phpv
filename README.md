@@ -139,20 +139,6 @@ This command will:
 
     Finally, the script prints a success message and the PHP version to verify the activation.
 
-#### Example Usage
-
-**Activate PHP 8.1:**
-
-```bash
-phpenv 81
-```
-
-**Install and Activate PHP 8.3:**
-
-```bash
-phpenv -i 83
-```
-
 #### Troubleshooting
 
 1. **Error: `git` is not installed**
@@ -189,7 +175,7 @@ phpenv -i 83
 
 5. **Error: `safe_flock` implicit declaration**
 
-    When trying to install PHP 8.1, you may encounter an error related to the `c-client` package. This issue is due to an implicit declaration of the `safe_flock` function in GCC 13. To fix this, add `-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types` to the `CFLAGS` in the `c-client` `PKGBUILD` file:
+    When trying to install PHP 8.1, you may encounter an error related to the `c-client` package. This issue is due to an implicit declaration of the `safe_flock` function in GCC 13. To fix this, add `-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types` to the `CFLAGS` in the `c-client` `PKGBUILD` file. For more details, refer to [this Arch Linux forum post](https://bbs.archlinux.org/viewtopic.php?id=295976):
 
     ```diff
     diff --git a/PKGBUILD b/PKGBUILD
@@ -208,6 +194,28 @@ phpenv -i 83
     ```
 
     After applying this change, rebuild the `c-client` package, and then proceed with the PHP 8.1 installation.
+
+#### Additional Resources
+
+For troubleshooting and further assistance, refer to Michael Butler's original [Install PHP on Arch/Manjaro](https://gist.github.com/michaelbutler/4a89bb23e2d30f1b0585b98d2b67cf55) guide, which inspired this project.
+
+#### Uploading `c-client` PKGBUILD and Prebuilt Package
+
+If you encounter difficulties installing `c-client`, you can download the `c-client` PKGBUILD and a prebuilt package (`c-client-2007f-20-x86_64.pkg.tar.zst`) from the following links:
+
+-   [Download `c-client` PKGBUILD](link-to-your-pkgbuild)
+-   [Download Prebuilt `c-client` Package](link-to-your-prebuilt-package)
+
+Ensure to verify the integrity of the prebuilt package using VirusTotal or another trusted source before installation.
+
+Here are the checksums for uploaded version of `c-client-2007f-20-x86_64.pkg.tar.zst`:
+
+-   **MD5:** 96d92a8b98afd78d2f2c80f8b0d76473
+-   **SHA1:** 4451582984bf02b1b78425b75100ca20018c8557
+-   **SHA256:** c6c9a0a411f476be1357f5aad8db897ce4d47f3f78757acd2aade3e477e2fe4d
+-   **SHA512:** 9628031b0f0efe4024c515f0a882418d7665b3267644f3bf0f12adbc5f200a9cca3049ab218be176ae8562673edca46190ca44de1154a32e0bf828028470ef1e
+
+These checksums can be used to verify the integrity of the downloaded `c-client-2007f-20-x86_64.pkg.tar.zst` package .
 
 #### Conclusion
 
