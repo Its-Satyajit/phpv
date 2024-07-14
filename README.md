@@ -51,6 +51,20 @@ Before using the script, ensure that your system meets the following requirement
     -   nuspell
     -   aspell
 
+1.  **Update PATH Environment Variable**
+
+    Ensure that `$HOME/bin` is included in your `PATH` by adding the following line to your `~/.bashrc`, `~/.zshrc`, or the relevant shell configuration file:
+
+    ```bash
+    export PATH="$HOME/bin:$PATH"
+    ```
+
+    After updating the configuration file, reload it with:
+
+    ```bash
+    source ~/.bashrc  # or source ~/.zshrc
+    ```
+
 #### Script Usage
 
 The script can be used in two primary modes:
