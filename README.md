@@ -4,6 +4,14 @@
 
 The `phpenv` script is designed to manage and switch between different PHP versions on your system. It can also install new PHP versions from the Arch User Repository (AUR) if needed. This document provides detailed instructions on using the script effectively.
 
+##### Switch Php Versions
+
+![](assets/20240715_020724_Switch.png)
+
+##### Install Php Versions
+
+![](assets/20240715_020736_Install.png)
+
 #### Prerequisites
 
 Before using the script, ensure that your system meets the following requirements:
