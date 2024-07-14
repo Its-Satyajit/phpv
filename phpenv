@@ -38,7 +38,9 @@ if [[ $INSTALL == true ]]; then
   mkdir -p $HOME/src
   cd $HOME/src
   
-  git clone https://aur.archlinux.org/php$VERSION.git
+  REPO_URL="https://aur.archlinux.org/php$VERSION.git"
+  echo -e "${green}Cloning from $REPO_URL...${reset}"
+  git clone $REPO_URL
   cd php$VERSION
   makepkg -si
   
