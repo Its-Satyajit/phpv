@@ -1,4 +1,4 @@
-### `phpenv` Script Documentation
+### Documentation
 
 #### Overview
 
@@ -197,14 +197,16 @@ This command will:
 
 #### Additional Resources
 
-For troubleshooting and further assistance, refer to Michael Butler's original [Install PHP on Arch/Manjaro](https://gist.github.com/michaelbutler/4a89bb23e2d30f1b0585b98d2b67cf55) guide, which inspired this project.
+This Project is inspired by Butler's [Install PHP on Arch/Manjaro](https://gist.github.com/michaelbutler/4a89bb23e2d30f1b0585b98d2b67cf55) guide, which inspired this project.
 
 #### Uploading `c-client` PKGBUILD and Prebuilt Package
 
 If you encounter difficulties installing `c-client`, you can download the `c-client` PKGBUILD and a prebuilt package (`c-client-2007f-20-x86_64.pkg.tar.zst`) from the following links:
 
--   [Download `c-client` PKGBUILD](link-to-your-pkgbuild)
--   [Download Prebuilt `c-client` Package](link-to-your-prebuilt-package)
+-   [Download `c-client` PKGBUILD](https://github.com/Its-Satyajit/phpenv/blob/main/c-client/PKGBUILD)
+    [VirusTotal](https://www.virustotal.com/gui/file/c6c9a0a411f476be1357f5aad8db897ce4d47f3f78757acd2aade3e477e2fe4d?nocache=1)
+-   [Download Prebuilt `c-client` Package](https://github.com/Its-Satyajit/phpenv/blob/main/c-client/c-client-2007f-20-x86_64.pkg.tar.zst)
+    [VirusTotal](https://www.virustotal.com/gui/file/37ad0feee95cfc36a81e66cf4ea223ea1d47a47293a63ca62b363e44dc45790d/detection)
 
 Ensure to verify the integrity of the prebuilt package using VirusTotal or another trusted source before installation.
 
@@ -216,7 +218,3 @@ Here are the checksums for uploaded version of `c-client-2007f-20-x86_64.pkg.tar
 -   **SHA512:** 9628031b0f0efe4024c515f0a882418d7665b3267644f3bf0f12adbc5f200a9cca3049ab218be176ae8562673edca46190ca44de1154a32e0bf828028470ef1e
 
 These checksums can be used to verify the integrity of the downloaded `c-client-2007f-20-x86_64.pkg.tar.zst` package .
-
-#### Conclusion
-
-The `phpenv` script simplifies the process of managing multiple PHP versions on your system, allowing you to easily switch between them or install new versions as needed. Follow the instructions in this document to ensure proper usage and troubleshooting.
