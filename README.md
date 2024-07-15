@@ -16,7 +16,7 @@ The `phpenv` script is designed to manage and switch between different PHP versi
 
 Before using the script, ensure that your system meets the following requirements:
 
--   **Operating System**: Manjaro Linux (or any Arch-based distribution)
+-   **Operating Systems:** Arch Linux, Manjaro, EndeavourOS, Garuda Linux, ArcoLinux, or any other Arch-based distribution.
 -   **Required Tools**: `git`, `makepkg`, `pacman`
 
 #### Installation
