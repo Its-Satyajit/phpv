@@ -2,7 +2,7 @@
 
 #### Overview
 
-The `phpenv` script is designed to manage and switch between different PHP versions on your Manjaro Linux system. It can install new PHP versions from the Arch User Repository (AUR) and update existing installations. This document provides detailed instructions on using the script effectively.
+The `phpenv` script is designed to manage and switch between different PHP versions on your Arch Linux, Manjaro, EndeavourOS, Garuda Linux, ArcoLinux, or any other Arch-based Linux system. It can install new PHP versions from the Arch User Repository (AUR) and update existing installations. This document provides detailed instructions on using the script effectively.
 
 ##### Switch PHP Versions
 
@@ -31,7 +31,7 @@ Before using the script, ensure that your system meets the following requirement
 
 2. **Ensure Necessary Tools are Installed**
 
-    The script requires `git` and `makepkg` to function. These tools are usually pre-installed on Manjaro Linux. Verify their presence using:
+    The script requires `git` and `makepkg` to function. These tools are usually pre-installed on distribution. Verify their presence using:
 
     ```bash
     which git makepkg
