@@ -11,16 +11,18 @@ reset='\033[0m'
 
 # Global variables
 INSTALL=false
+UPDATE=false
 VERSION=""
 VERBOSE=false
 DRY_RUN=false
 
 # Function to print usage
 usage() {
-  echo -e "Usage: \`phpenv [VERSION]\` or \`phpenv -i [VERSION]\`"
-  echo -e "Example: \`phpenv 83\` or \`phpenv -i 83\`"
+  echo -e "Usage: \`phpenv [VERSION]\` or \`phpenv -i [VERSION]\` or \`phpenv -u [VERSION]\`"
+  echo -e "Example: \`phpenv 83\` or \`phpenv -i 83\` or \`phpenv -u 81\`"
   echo -e "Options:"
   echo -e "  -i             Install the specified PHP version"
+  echo -e "  -u             Update and build the specified PHP version"
   echo -e "  -v             Enable verbose output"
   echo -e "  --dry-run      Perform a dry run without making changes"
   echo -e "  -h, --help     Show this help message"
@@ -85,6 +87,44 @@ install_php() {
   fi
 }
 
+# Function to update and build PHP
+update_php() {
+  log "${green}Updating and building PHP $VERSION...${reset}"
+
+  # Check if directory exists
+  cd "$HOME/src" || {
+    echo -e "${red}Error: Failed to navigate to $HOME/src directory${reset}"
+    exit 1
+  }
+
+  if [[ ! -d "php$VERSION" ]]; then
+    echo -e "${red}Error: Directory php$VERSION does not exist. Use -i to install.${reset}"
+    exit 1
+  fi
+
+  cd "php$VERSION" || {
+    echo -e "${red}Error: Failed to navigate to php$VERSION directory${reset}"
+    exit 1
+  }
+
+  log "${green}Pulling latest changes from repository...${reset}"
+  [[ $DRY_RUN == false ]] && git pull origin main || {
+    echo -e "${red}Error: Failed to pull latest changes from repository${reset}"
+    exit 1
+  }
+
+  log "${green}Starting the build process...${reset}"
+  [[ $DRY_RUN == false ]] && makepkg -si || {
+    echo -e "${red}Error: Failed to build and install PHP $VERSION${reset}"
+    exit 1
+  }
+
+  if [[ ! -x "$PHP_BIN" ]]; then
+    echo -e "${red}Error: PHP $VERSION binary not found at $PHP_BIN after installation${reset}"
+    exit 1
+  fi
+}
+
 # Function to create symbolic links
 create_symlinks() {
   log "${green}Creating symbolic links...${reset}"
@@ -112,6 +152,7 @@ parse_arguments() {
   while [[ "$#" -gt 0 ]]; do
     case $1 in
       -i) INSTALL=true; VERSION=$2; shift ;;
+      -u) UPDATE=true; VERSION=$2; shift ;;
       -v) VERBOSE=true ;;
       --dry-run) DRY_RUN=true ;;
       -h|--help) usage; exit 0 ;;
@@ -141,6 +182,8 @@ PHP_PECL_BIN="/usr/bin/pecl$VERSION"
 
 if [[ $INSTALL == true ]]; then
   install_php
+elif [[ $UPDATE == true ]]; then
+  update_php
 fi
 
 if [[ ! -x "$PHP_BIN" ]]; then
