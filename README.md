@@ -18,7 +18,6 @@ Before using the script, ensure that your system meets the following requirement
 
 -   **Operating System**: Manjaro Linux (or any Arch-based distribution)
 -   **Required Tools**: `git`, `makepkg`, `pacman`
--   **Dependencies**: Various development and runtime libraries
 
 #### Installation
 
@@ -38,28 +37,7 @@ Before using the script, ensure that your system meets the following requirement
     which git makepkg
     ```
 
-3. **Install Required Dependencies**
-
-    The script checks and installs the following dependencies if they are not already present on your system:
-
-    - autoconf
-    - automake
-    - patchelf
-    - apache
-    - postgresql-libs
-    - unixodbc
-    - libfbclient
-    - freetds
-    - tidy
-    - oniguruma
-    - aspell
-    - enchant
-    - libvoikko
-    - hspell
-    - nuspell
-    - aspell
-
-4. **Update PATH Environment Variable**
+3. **Update PATH Environment Variable**
 
     Ensure that `$HOME/bin` is included in your `PATH` by adding the following line to your `~/.bashrc`, `~/.zshrc`, or the relevant shell configuration file:
 
@@ -159,33 +137,32 @@ This command will display the usage information for the script.
 
 #### Detailed Script Walkthrough
 
-1. **Script Initialization**
+1. **Script Initialization**:
 
-    The script starts by enabling debug mode if `DEBUG` is set and defines color variables for output formatting.
+    - The script starts by enabling debug mode if `DEBUG` is set and defines color variables (`red`, `green`, `yellow`, `reset`) for terminal output formatting.
 
-2. **Argument Parsing**
+2. **Argument Parsing**:
 
-    The script parses the input arguments to determine if it needs to install a new PHP version (`-i` flag) or simply activate an existing one.
+    - It parses command-line arguments to determine whether to install a new PHP version (`-i` flag) or activate an existing one. It also handles options like verbose output (`-v`), dry-run (`--dry-run`), and help (`-h` or `--help`).
 
-3. **Tool and Dependency Checks**
+3. **Tool and Dependency Checks**:
 
-    The script verifies the presence of essential tools (`git` and `makepkg`) and installs required dependencies using `pacman`.
+    - The script checks if essential tools (`git` and `makepkg`) are installed using `command -v`. It displays an error and exits if any tool is missing.
 
-4. **Directory Setup**
+4. **Directory Setup**:
 
-    The script ensures that `$HOME/bin` and `$HOME/src` directories exist. If not, it creates them.
+    - It ensures that the `$HOME/bin` and `$HOME/src` directories exist. If not, it creates them using `mkdir -p`.
 
-5. **Cloning and Building PHP**
+5. **Cloning and Building PHP**:
 
-    If the `-i` flag is used, the script clones the AUR repository for the specified PHP version, navigates into the directory, and builds the package using `makepkg -si`. Before starting the build process, the script prints a message indicating that the build is starting.
+    - If the `-i` flag is set (`INSTALL=true`), the script clones the AUR repository for the specified PHP version, navigates into the directory, and builds the package using `makepkg -si`. Before starting the build process, it logs a message indicating the start of the build.
 
-6. **Creating Symbolic Links**
+6. **Creating Symbolic Links**:
 
-    The script removes existing symbolic links in `$HOME/bin` for PHP binaries and creates new links pointing to the specified PHP version's binaries.
+    - After installing PHP or if the `-i` flag was not used, the script removes existing symbolic links in `$HOME/bin` for PHP binaries and creates new links pointing to the specified PHP version's binaries.
 
-7. **Output and Verification**
-
-    Finally, the script prints a success message and the PHP version to verify the activation.
+7. **Output and Verification**:
+    - Finally, the script prints a success message indicating that PHP $VERSION has been successfully activated. It verifies the activation by displaying the PHP version using `php -v`.
 
 #### Troubleshooting
 
