@@ -173,7 +173,7 @@ For common issues encountered while using the `phpenv` script, refer to the trou
 
 #### Additional Resources
 
-For more information on installing and managing PHP versions on Arch-based distributions, refer to Butler's [Install PHP on Arch/Manjaro](https://gist.github.com/michaelbutler/4a89bb23e2d30f1b0585b98d2b67cf55) guide.
+For more information on installing and managing PHP versions on Arch-based distributions, refer to Butler's [Install PHP on Arch/Manjaro](https://gist.github.com/michaelbutler/4a89bb23e2d30f1b0585b98d2b67cf55) guide from where I inspired to build this script.
 
 #### Uploading `c-client` PKGBUILD and Prebuilt Package
 
