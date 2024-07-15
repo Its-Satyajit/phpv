@@ -1,194 +1,71 @@
-# Install and Switch between Any PHP on Arch / Manjaro / EndeavourOS / Garuda Linux / ArcoLinux.
+## PHPV: Effortless PHP Version Management for Arch Linux-based Systems
 
-### Documentation
+### Welcome to PHPV
 
-#### Overview
+Welcome to PHPV, your go-to tool for effortlessly managing PHP versions on Arch Linux-based distributions like Manjaro, EndeavourOS, Garuda Linux, and ArcoLinux. Whether you're a seasoned developer or just getting started, PHPV simplifies PHP version management with a touch of humor and reliability.
 
-The `phpenv` script is designed to manage and switch between different PHP versions on your Arch Linux, Manjaro, EndeavourOS, Garuda Linux, ArcoLinux, or any other Arch-based Linux system. It can install new PHP versions from the Arch User Repository (AUR) and update existing installations. This document provides detailed instructions on using the script effectively.
+### Installation Guide
 
-##### Switch PHP Versions
+#### Step 1: Download PHPV
 
-![](assets/20240715_020724_Switch.png)
+Get started by downloading PHPV directly from GitHub. Open your terminal and enter the following command:
 
-##### Install PHP Versions
+```bash
+curl -sSL https://raw.githubusercontent.com/Its-Satyajit/phpv/main/install.sh | bash
+```
 
-![](assets/20240715_161411_install_v2.png)
+Watch as PHPV sets itself up—it’s like having your tech-savvy friend do the heavy lifting, with a sprinkle of charm.
 
-#### Update PHP Versions
+#### Step 2: Follow Setup Instructions
 
-![](assets/20240715_161446_update_v1.png)
+PHPV guides you through setup effortlessly:
 
-#### Prerequisites
+-   **Create Necessary Directories**: PHPV ensures everything has a place, setting up `$HOME/src` and `$HOME/bin`.
+-   **Update Your PATH**: No more lost scripts! PHPV updates your PATH so it's always just a command away.
 
-Before using the script, ensure that your system meets the following requirements:
+### How to Use PHPV
 
--   **Operating Systems:** Arch Linux, Manjaro, EndeavourOS, Garuda Linux, ArcoLinux, or any other Arch-based distribution.
--   **Required Tools**: `git`, `makepkg`, `pacman`
+#### Installing or Updating PHP Versions
 
-#### Installation
+Need the latest PHP version or looking to update an existing one? PHPV makes it a breeze:
 
-1. **Download and Save the Script**
+```bash
+phpv -i <version>
+```
 
-    Save the script to a file named `phpenv` in a directory included in your `PATH`, such as `$HOME/bin`. Ensure the script is executable:
+Simply replace `<version>` with the PHP version number you need (e.g., 8.3, 8.4, or even 9.0).
 
-    ```bash
-    chmod +x $HOME/bin/phpenv
-    ```
+#### Switching PHP Versions
 
-2. **Ensure Necessary Tools are Installed**
+Curious about PHP 7.4 or keen to explore PHP 8.1? PHPV lets you switch versions effortlessly:
 
-    The script requires `git` and `makepkg` to function. These tools are usually pre-installed on distribution. Verify their presence using:
+```bash
+phpv <version>
+```
 
-    ```bash
-    which git makepkg
-    ```
+Choose your version, hit enter, and PHPV handles the rest—because your time is valuable, and coding should be seamless.
 
-3. **Update PATH Environment Variable**
+### Troubleshooting Made Simple
 
-    Ensure that `$HOME/bin` is included in your `PATH` by adding the following line to your `~/.bashrc`, `~/.zshrc`, or the relevant shell configuration file:
+#### Dealing with PHP Compilation Issues
 
-    ```bash
-    export PATH="$HOME/bin:$PATH"
-    ```
+Encountering roadblocks while compiling PHP, particularly with c-client? PHPV offers a quick fix:
 
-    After updating the configuration file, reload it with:
+-   **Download Pre-built Binary**: Skip the compilation hassle with our pre-built binary from the PHPV repository:
 
-    ```bash
-    source ~/.bashrc  # or source ~/.zshrc
-    ```
+    [c-client-2007f-20-x86_64.pkg.tar.zst](https://github.com/Its-Satyajit/phpv/blob/main/c-client/c-client-2007f-20-x86_64.pkg.tar.zst)
 
-#### Script Usage
+    It's like ordering takeout when your culinary adventures hit a snag.
 
-The script supports several modes of operation:
+-   **Verify Integrity**: Ensure your download's integrity with these checksums:
 
-1. **Install a New PHP Version**
+    -   **MD5**: 96d92a8b98afd78d2f2c80f8b0d76473
+    -   **SHA1**: 4451582984bf02b1b78425b75100ca20018c8557
+    -   **SHA256**: c6c9a0a411f476be1357f5aad8db897ce4d47f3f78757acd2aade3e477e2fe4d
+    -   **SHA512**: 9628031b0f0efe4024c515f0a882418d7665b3267644f3bf0f12adbc5f200a9cca3049ab218be176ae8562673edca46190ca44de1154a32e0bf828028470ef1e
 
-    To install a new PHP version from the AUR, use the `-i` flag followed by the version number:
+    Ensure peace of mind with a verification check on [VirusTotal](https://www.virustotal.com/gui/file/c6c9a0a411f476be1357f5aad8db897ce4d47f3f78757acd2aade3e477e2fe4d?nocache=1).
 
-    ```bash
-    phpenv -i [VERSION]
-    ```
+### Conclusion: Your PHP Companion
 
-    Example:
-
-    ```bash
-    phpenv -i 83
-    ```
-
-    This command installs the specified PHP version and creates symbolic links in `$HOME/bin` pointing to its binaries.
-
-2. **Update and Build an Existing PHP Version**
-
-    To update and rebuild an existing PHP version from the AUR, use the `-u` flag followed by the version number:
-
-    ```bash
-    phpenv -u [VERSION]
-    ```
-
-    Example:
-
-    ```bash
-    phpenv -u 83
-    ```
-
-    This command updates the specified PHP version by pulling the latest changes from its repository and rebuilding it.
-
-3. **Verbose Output Mode**
-
-    To enable verbose mode and get detailed logging of the script’s actions, use the `-v` flag:
-
-    ```bash
-    phpenv -v [VERSION]
-    ```
-
-    Example:
-
-    ```bash
-    phpenv -v 83
-    ```
-
-    This command provides detailed output of the script’s operations during installation or update.
-
-4. **Dry Run Mode**
-
-    To perform a dry run and see what the script would do without making any changes, use the `--dry-run` flag:
-
-    ```bash
-    phpenv --dry-run [VERSION]
-    ```
-
-    Example:
-
-    ```bash
-    phpenv --dry-run -i 83
-    ```
-
-    This command shows the steps the script would take to install or update the specified PHP version without actually performing any actions.
-
-5. **Help Information**
-
-    To display usage information and exit, use the `-h` or `--help` flag:
-
-    ```bash
-    phpenv -h
-    ```
-
-    This command displays the usage information for the script.
-
-#### Detailed Script Walkthrough
-
-The `phpenv` script performs the following steps during execution:
-
-1. **Initialization and Debug Mode**
-
-    - The script initializes and enables debug mode if `DEBUG` is set. It defines color variables for terminal output formatting.
-
-2. **Argument Parsing**
-
-    - It parses command-line arguments to determine whether to install (`-i` flag) or update (`-u` flag) a PHP version. Additional options include verbose output (`-v`), dry-run (`--dry-run`), and help (`-h` or `--help`).
-
-3. **Tool and Dependency Checks**
-
-    - The script checks if essential tools (`git` and `makepkg`) are installed using `command -v`. It displays an error and exits if any tool is missing.
-
-4. **PHP Installation**
-
-    - If installing (`-i` flag), the script clones the AUR repository for the specified PHP version, navigates to the directory, and builds the package using `makepkg -si`.
-
-5. **PHP Update and Build**
-
-    - If updating (`-u` flag), the script navigates to the existing PHP version's directory, pulls the latest changes from its repository using `git pull`, and rebuilds the package using `makepkg -si`.
-
-6. **Symbolic Link Creation**
-
-    - After installation or update, the script removes existing symbolic links in `$HOME/bin` for PHP binaries and creates new links pointing to the specified PHP version's binaries.
-
-7. **Output and Verification**
-
-    - Finally, the script prints a success message indicating that PHP $VERSION has been successfully installed or updated. It verifies the activation by displaying the PHP version using `php -v`.
-
-#### Troubleshooting
-
-For common issues encountered while using the `phpenv` script, refer to the troubleshooting section in the [documentation](#troubleshooting).
-
-#### Additional Resources
-
-For more information on installing and managing PHP versions on Arch-based distributions, refer to Butler's [Install PHP on Arch/Manjaro](https://gist.github.com/michaelbutler/4a89bb23e2d30f1b0585b98d2b67cf55) guide from where I inspired to build this script.
-
-#### Uploading `c-client` PKGBUILD and Prebuilt Package
-
-If you encounter difficulties installing `c-client`, you can download the `c-client` PKGBUILD and a prebuilt package (`c-client-2007f-20-x86_64.pkg.tar.zst`) from the following links:
-
--   [Download `c-client` PKGBUILD](https://github.com/Its-Satyajit/phpenv/blob/main/c-client/PKGBUILD)
--   [Download Prebuilt `c-client` Package](https://github.com/Its-Satyajit/phpenv/blob/main/c-client/c-client-2007f-20-x86_64.pkg.tar.zst)
-
-Ensure to verify the integrity of the prebuilt package using VirusTotal or another trusted source before installation.
-
-Here are the checksums for `c-client-2007f-20-x86_64.pkg.tar.zst`:
-
--   **MD5:** 96d92a8b98afd78d2f2c80f8b0d76473
--   **SHA1:** 4451582984bf02b1b78425b75100ca20018c8557
--   **SHA256:** c6c9a0a411f476be1357f5aad8db897ce4d47f3f78757acd2aade3e477e2fe4d
--   **SHA512:** 9628031b0f0efe4024c515f0a882418d7665b3267644f3bf0f12adbc5f200a9cca3049ab218be176ae8562673edca46190ca44de1154a32e0bf828028470ef1e
-
-    VirusTotal for prebuilt c-client-2007f-20-x86_64.pkg.tar.zst: [link](https://www.virustotal.com/gui/file/c6c9a0a411f476be1357f5aad8db897ce4d47f3f78757acd2aade3e477e2fe4d?nocache=1)
+PHPV isn't just a tool—it’s your PHP version companion. With PHPV, managing PHP versions is as delightful as your favorite pizza delivery (minus the calories). Dive in, enjoy the simplicity, and let PHPV handle the PHP versions while you focus on crafting exceptional code.
