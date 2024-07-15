@@ -10,9 +10,13 @@ The `phpenv` script is designed to manage and switch between different PHP versi
 
 ![](assets/20240715_020724_Switch.png)
 
-##### Install and Update PHP Versions
+##### Install PHP Versions
 
-![](assets/20240715_020736_Install.png)
+![](assets/20240715_161411_install_v2.png)
+
+#### Update PHP Versions
+
+![](assets/20240715_161446_update_v1.png)
 
 #### Prerequisites
 
