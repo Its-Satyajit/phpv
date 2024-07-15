@@ -57,11 +57,17 @@ install_php() {
 
   REPO_URL="https://aur.archlinux.org/php$VERSION.git"
   if [[ -d "php$VERSION" ]]; then
-    log "${yellow}Directory php$VERSION already exists. Removing it...${reset}"
-    [[ $DRY_RUN == false ]] && rm -rf "php$VERSION" || {
-      echo -e "${red}Error: Failed to remove existing directory php$VERSION${reset}"
-      exit 1
-    }
+    read -rp "$(echo -e "${yellow}Directory php$VERSION already exists. Do you want to remove it? (y/n)${reset} ")" remove_response
+    if [[ "$remove_response" =~ ^[Yy]$ ]]; then
+      log "${yellow}Removing directory php$VERSION...${reset}"
+      [[ $DRY_RUN == false ]] && rm -rf "php$VERSION" || {
+        echo -e "${red}Error: Failed to remove existing directory php$VERSION${reset}"
+        exit 1
+      }
+    else
+      echo -e "${yellow}Consider using 'phpenv -u $VERSION' to update PHP version $VERSION.${reset}"
+      exit 0
+    fi
   fi
 
   log "${green}Cloning from $REPO_URL...${reset}"
