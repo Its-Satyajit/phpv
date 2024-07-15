@@ -88,7 +88,7 @@ The script supports several modes of operation:
     Example:
 
     ```bash
-    phpenv -u 81
+    phpenv -u 83
     ```
 
     This command updates the specified PHP version by pulling the latest changes from its repository and rebuilding it.

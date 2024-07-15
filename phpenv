@@ -19,7 +19,7 @@ DRY_RUN=false
 # Function to print usage
 usage() {
   echo -e "Usage: \`phpenv [VERSION]\` or \`phpenv -i [VERSION]\` or \`phpenv -u [VERSION]\`"
-  echo -e "Example: \`phpenv 83\` or \`phpenv -i 83\` or \`phpenv -u 81\`"
+  echo -e "Example: \`phpenv 83\` or \`phpenv -i 83\` or \`phpenv -u 83\`"
   echo -e "Options:"
   echo -e "  -i             Install the specified PHP version"
   echo -e "  -u             Update and build the specified PHP version"
@@ -93,6 +93,7 @@ install_php() {
   fi
 }
 
+# Function to update and build PHP
 update_php() {
   log "${green}Updating and building PHP $VERSION...${reset}"
 
@@ -112,32 +113,55 @@ update_php() {
     exit 1
   }
 
-  log "${green}Pulling latest changes from repository...${reset}"
+  log "${green}Checking for updates...${reset}"
 
-  # Try to pull from 'main', fallback to 'master' if 'main' doesn't exist
-  if git show-ref --verify --quiet refs/heads/main; then
-    [[ $DRY_RUN == false ]] && git pull origin main || {
-      echo -e "${red}Error: Failed to pull latest changes from main branch${reset}"
-      exit 1
-    }
+  # Attempt to fetch updates from the 'main' branch
+  if git fetch origin main 2>/dev/null; then
+    BRANCH="main"
+  elif git fetch origin master 2>/dev/null; then
+    BRANCH="master"
+    echo -e "${yellow}Warning: 'main' branch not found. Using 'master' branch instead.${reset}"
   else
-    [[ $DRY_RUN == false ]] && git pull origin master || {
-      echo -e "${red}Error: Failed to pull latest changes from master branch${reset}"
+    echo -e "${red}Error: Failed to fetch updates from both 'main' and 'master' branches.${reset}"
+    exit 1
+  fi
+
+  # Check if there are new commits
+  LOCAL_COMMIT=$(git rev-parse HEAD)
+  REMOTE_COMMIT=$(git rev-parse origin/$BRANCH)
+
+  if [[ $LOCAL_COMMIT == $REMOTE_COMMIT ]]; then
+    echo -e "${green}PHP $VERSION is already up-to-date.${reset}"
+    exit 0
+  fi
+
+  log "${green}Pulling latest changes from the repository...${reset}"
+
+  # Pull the latest changes
+  if [[ $DRY_RUN == false ]]; then
+    if ! git pull origin $BRANCH; then
+      echo -e "${red}Error: Failed to pull the latest changes from the repository.${reset}"
       exit 1
-    }
+    fi
   fi
 
   log "${green}Starting the build process...${reset}"
-  [[ $DRY_RUN == false ]] && makepkg -si || {
-    echo -e "${red}Error: Failed to build and install PHP $VERSION${reset}"
-    exit 1
-  }
+
+  # Build and install PHP
+  if [[ $DRY_RUN == false ]]; then
+    if ! makepkg -si; then
+      echo -e "${red}Error: Failed to build and install PHP $VERSION.${reset}"
+      exit 1
+    fi
+  fi
 
   if [[ ! -x "$PHP_BIN" ]]; then
-    echo -e "${red}Error: PHP $VERSION binary not found at $PHP_BIN after installation${reset}"
+    echo -e "${red}Error: PHP $VERSION binary not found at $PHP_BIN after installation.${reset}"
     exit 1
   fi
 }
+
+
 
 # Function to create symbolic links
 create_symlinks() {
