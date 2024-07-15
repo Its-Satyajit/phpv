@@ -75,10 +75,13 @@ Before using the script, ensure that your system meets the following requirement
 
 #### Script Usage
 
-The script can be used in two primary modes:
+The script can be used in four primary modes:
 
 1. **Activate an Existing PHP Version**
 2. **Install and Activate a New PHP Version**
+3. **Verbose Output Mode**
+4. **Dry Run Mode**
+5. **Help Information**
 
 ##### Activate an Existing PHP Version
 
@@ -110,12 +113,49 @@ Example:
 phpenv -i 83
 ```
 
-This command will:
+This command will install the specified PHP version and create symbolic links in `$HOME/bin` pointing to the new PHP version's binaries.
 
-1. Check and install the required dependencies if they are not already present.
-2. Clone the AUR repository for the specified PHP version.
-3. Build and install the PHP version using `makepkg`.
-4. Create symbolic links in `$HOME/bin` pointing to the new PHP version's binaries.
+##### Verbose Output Mode
+
+To enable verbose mode and get detailed logging of the script’s actions, use the `-v` flag:
+
+```bash
+phpenv -v [VERSION]
+```
+
+Example:
+
+```bash
+phpenv -v 83
+```
+
+This command will provide detailed output of the script’s operations while activating the specified PHP version.
+
+##### Dry Run Mode
+
+To perform a dry run and see what the script would do without making any changes, use the `--dry-run` flag:
+
+```bash
+phpenv --dry-run [VERSION]
+```
+
+Example:
+
+```bash
+phpenv --dry-run -i 83
+```
+
+This command will show the steps the script would take to install and activate the specified PHP version without actually performing any actions.
+
+##### Help Information
+
+To display usage information and exit, use the `-h` or `--help` flag:
+
+```bash
+phpenv -h
+```
+
+This command will display the usage information for the script.
 
 #### Detailed Script Walkthrough
 
