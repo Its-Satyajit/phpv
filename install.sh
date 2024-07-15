@@ -106,6 +106,10 @@ install_phpv() {
     else
         print_error "Installation failed. Check PATH configuration."
     fi
+
+    # Print main functions from phpv script
+    print_info "Usage for install/update: phpv -i <version>"
+    print_info "Usage for switch: phpv <version>"
 }
 
 # Execute installation

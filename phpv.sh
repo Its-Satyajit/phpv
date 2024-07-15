@@ -140,7 +140,7 @@ switch_php_version() {
 
 # Check if PHP version argument is provided
 if [ $# -ne 1 ] && [ $# -ne 2 ]; then
-  print_error "Invalid number of arguments."
+  # print_error "Invalid number of arguments."
   print_info "Usage for install/update: $0 -i <version>"
   print_info "Usage for switch: $0 <version>"
   exit 1
