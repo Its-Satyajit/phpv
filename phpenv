@@ -15,13 +15,6 @@ VERSION=""
 VERBOSE=false
 DRY_RUN=false
 
-# Dependency list
-dependencies=(
-  autoconf automake patchelf apache postgresql-libs unixodbc
-  libfbclient freetds tidy oniguruma aspell enchant libvoikko
-  hspell nuspell aspell
-)
-
 # Function to print usage
 usage() {
   echo -e "Usage: \`phpenv [VERSION]\` or \`phpenv -i [VERSION]\`"
@@ -44,19 +37,6 @@ check_tools() {
     if ! command -v $tool &> /dev/null; then
       echo -e "${red}Error: $tool is not installed. Please install it and try again.${reset}"
       exit 1
-    fi
-  done
-}
-
-# Function to install dependencies
-install_dependencies() {
-  for dep in "${dependencies[@]}"; do
-    if ! pacman -Qs $dep > /dev/null; then
-      log "${yellow}Installing dependency: $dep${reset}"
-      [[ $DRY_RUN == false ]] && sudo pacman -S --needed --noconfirm $dep || {
-        echo -e "${red}Error: Failed to install dependency $dep${reset}"
-        exit 1
-      }
     fi
   done
 }
@@ -160,7 +140,6 @@ PHP_PEAR_BIN="/usr/bin/pear$VERSION"
 PHP_PECL_BIN="/usr/bin/pecl$VERSION"
 
 if [[ $INSTALL == true ]]; then
-  install_dependencies
   install_php
 fi
 
