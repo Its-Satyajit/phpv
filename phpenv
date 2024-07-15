@@ -93,7 +93,6 @@ install_php() {
   fi
 }
 
-# Function to update and build PHP
 update_php() {
   log "${green}Updating and building PHP $VERSION...${reset}"
 
@@ -114,10 +113,19 @@ update_php() {
   }
 
   log "${green}Pulling latest changes from repository...${reset}"
-  [[ $DRY_RUN == false ]] && git pull origin main || {
-    echo -e "${red}Error: Failed to pull latest changes from repository${reset}"
-    exit 1
-  }
+
+  # Try to pull from 'main', fallback to 'master' if 'main' doesn't exist
+  if git show-ref --verify --quiet refs/heads/main; then
+    [[ $DRY_RUN == false ]] && git pull origin main || {
+      echo -e "${red}Error: Failed to pull latest changes from main branch${reset}"
+      exit 1
+    }
+  else
+    [[ $DRY_RUN == false ]] && git pull origin master || {
+      echo -e "${red}Error: Failed to pull latest changes from master branch${reset}"
+      exit 1
+    }
+  fi
 
   log "${green}Starting the build process...${reset}"
   [[ $DRY_RUN == false ]] && makepkg -si || {
