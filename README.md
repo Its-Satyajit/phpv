@@ -93,7 +93,7 @@ Pick your weapon (version shorthand), and PHPV handles the rest. Debugging shoul
 
 Why waste time compiling? Download the pre-built c-client binary directly from PHPV:
 
--   c-client-2007f-20-x86_64.pkg.tar.zst
+-   [c-client-2007f-20-x86_64.pkg.tar.zst](https://github.com/Its-Satyajit/phpv/blob/main/c-client/c-client-2007f-20-x86_64.pkg.tar.zsthttps:/)
 
 This is the recommended approach for most users, saving you time and compilation headaches.
 
