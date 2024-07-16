@@ -26,91 +26,66 @@ print_info() {
 # Install PHPV script and update PATH
 install_phpv() {
     # Create required directories if they don't exist
-    print_info "Creating required directories..."
+    print_info "Crafting directories like a master builder..."
     mkdir -p "$HOME/src"
     mkdir -p "$HOME/bin"
 
     # Check if phpv script exists locally, otherwise download from GitHub
     if [ -f "phpv" ]; then
-        print_info "Using local phpv script..."
+        print_info "Found a local copy of phpv, because we believe in magic!"
     else
-        print_info "Downloading phpv script from GitHub..."
+        print_info "Summoning phpv script from the mystical GitHub realms..."
         if ! curl -fsSL -o phpv https://raw.githubusercontent.com/Its-Satyajit/phpv/main/phpv; then
-            print_error "Failed to download phpv script from GitHub."
+            print_error "Oh no! Failed to download phpv script from GitHub. The dragons must be restless."
             exit 1
         fi
     fi
 
     # Install main script
-    print_info "Installing main script..."
+    print_info "Enchanting the main script into $HOME/bin/phpv..."
     cp phpv "$HOME/bin/phpv"
     chmod +x "$HOME/bin/phpv"
 
     # Update PATH environment variable
-    print_info "Updating PATH environment variable..."
+    print_info "Updating the enchanted PATH environment..."
 
-    # Check if .bashrc exists and update PATH
-    if [ -f "$HOME/.bashrc" ]; then
-        if ! grep -q 'export PATH="$HOME/bin:$PATH"' "$HOME/.bashrc"; then
-            echo 'export PATH="$HOME/bin:$PATH"' >>"$HOME/.bashrc"
-            print_success "Updated PATH in $HOME/.bashrc"
+    # Check various shell configuration files and update PATH
+    update_shell_config() {
+        local config_file="$1"
+        local shell_name="$2"
+        if [ -f "$config_file" ]; then
+            if ! grep -q 'export PATH="$HOME/bin:$PATH"' "$config_file"; then
+                echo 'export PATH="$HOME/bin:$PATH"' >>"$config_file"
+                print_success "Added a sprinkle of magic to your $shell_name with PATH update."
+            else
+                print_warning "PATH was already enchanted in $shell_name, no extra magic needed."
+            fi
         else
-            print_warning "PATH is already configured in $HOME/.bashrc"
+            print_error "Could not find $config_file to enchant with PATH magic."
         fi
-    else
-        print_error "Could not find $HOME/.bashrc"
-    fi
+    }
 
-    # Check if .bash_profile exists and update PATH
-    if [ -f "$HOME/.bash_profile" ]; then
-        if ! grep -q 'export PATH="$HOME/bin:$PATH"' "$HOME/.bash_profile"; then
-            echo 'export PATH="$HOME/bin:$PATH"' >>"$HOME/.bash_profile"
-            print_success "Updated PATH in $HOME/.bash_profile"
-        else
-            print_warning "PATH is already configured in $HOME/.bash_profile"
-        fi
-    else
-        print_error "Could not find $HOME/.bash_profile"
-    fi
+    update_shell_config "$HOME/.bashrc" "bash"
+    update_shell_config "$HOME/.bash_profile" "bash profile"
+    update_shell_config "$HOME/.zshrc" "zsh"
+    update_shell_config "$HOME/.profile" "profile"
 
-    # Check if .zshrc exists and update PATH
-    if [ -f "$HOME/.zshrc" ]; then
-        if ! grep -q 'export PATH="$HOME/bin:$PATH"' "$HOME/.zshrc"; then
-            echo 'export PATH="$HOME/bin:$PATH"' >>"$HOME/.zshrc"
-            print_success "Updated PATH in $HOME/.zshrc"
-        else
-            print_warning "PATH is already configured in $HOME/.zshrc"
-        fi
-    else
-        print_error "Could not find $HOME/.zshrc"
-    fi
-
-    # Check if .profile exists and update PATH
-    if [ -f "$HOME/.profile" ]; then
-        if ! grep -q 'export PATH="$HOME/bin:$PATH"' "$HOME/.profile"; then
-            echo 'export PATH="$HOME/bin:$PATH"' >>"$HOME/.profile"
-            print_success "Updated PATH in $HOME/.profile"
-        else
-            print_warning "PATH is already configured in $HOME/.profile"
-        fi
-    else
-        print_warning "Could not find $HOME/.profile"
-    fi
-
-    # Reload shell configuration
+    # Refresh shell configuration
+    print_info "Casting spells to refresh your magical settings..."
     source "$HOME/.bashrc" 2>/dev/null || source "$HOME/.bash_profile" 2>/dev/null || source "$HOME/.zshrc" 2>/dev/null || true
 
-    # Final check
+    # Final verification
     if command -v phpv >/dev/null; then
-        print_success "Installation completed successfully!"
+        print_success "Installation complete! Your PHPV wand is now ready to wield."
     else
-        print_error "Installation failed. Check PATH configuration."
+        print_error "Oops! The installation ritual failed. Time to consult the ancient scrolls of PATH configuration."
     fi
 
-    # Print main functions from phpv script
-    print_info "Usage for install/update: phpv -i <version>"
-    print_info "Usage for switch: phpv <version>"
+    # Enlighten the user with PHPV incantations
+    print_info "To summon the powers of PHPV:"
+    print_info "For installation or update: phpv -i <version>"
+    print_info "For switching PHP versions: phpv <version>"
 }
 
-# Execute installation
+# Begin the installation journey
 install_phpv
