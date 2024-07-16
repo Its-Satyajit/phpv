@@ -103,66 +103,67 @@ Encountering cryptic c-client compilation errors? Fear not, fellow coder! PHPV o
 
 Here's the updated "Manual Compilation for the Intrepid" section with current humor, SEO optimization, and a balance between lightheartedness and technical accuracy:
 
-**Manual Compilation for the Intrepid (Advanced Users Only)**
+**2. Manual Compilation for the Intrepid (Advanced Users Only)**
 
-Feeling like Neo dodging green text in The Matrix? Think you possess the Kung Fu of compilation commands? Then embark on the legendary manual c-client compilation quest! But remember, with great power comes the responsibility to avoid cryptic error messages that could make a seasoned developer weep like a semicolon with no matching closing quote.
+-   Feeling like Neo dodging green text in The Matrix? Think you possess the Kung Fu of compilation commands? Then embark on the legendary manual c-client compilation quest! But remember, with great power comes the responsibility to avoid cryptic error messages that could make a seasoned developer weep like a semicolon with no matching closing quote.
 
-**Gather Your Tools:**
+    **Gather Your Tools:**
 
 -   Ensure you have the necessary development tools installed on your Arch Linux system (typically `make`, `gcc` or a compatible C compiler, and development headers for system libraries – usually installed with `pacman -S base-devel`). Think of these as your compilation lightsabers!
 
-**Download the Source Code (From the Source, Luke):**
+    **Download the Source Code (From the Source, Luke):**
 
-Access the official c-client source code repository: [https://gitweb.gentoo.org/repo/gentoo.git/tree/](https://gitweb.gentoo.org/repo/gentoo.git/tree/) (May the source be with you!)
+    Access the official c-client source code repository: [https://gitweb.gentoo.org/repo/gentoo.git/tree/](https://gitweb.gentoo.org/repo/gentoo.git/tree/) (May the source be with you!)
 
-**Unpack the Source (Break the Code's Curse):**
+    **Unpack the Source (Break the Code's Curse):**
 
-Extract the downloaded source code archive using `tar`:
+    -   Extract the downloaded source code archive using `tar`:
 
-```bash
-tar -zxvf c-client-X.Y.Z.tar.gz
-```
 
-Replace `X.Y.Z` with the specific version number you require. Pro tip: Check online for the latest stable version to avoid bugs that might be funnier than intended. Just kidding (or are we?).
+        ```bash
+        tar -zxvf c-client-X.Y.Z.tar.gz
+        ```
 
-**Configure and Build (with a Smidge of Magic, or Stack Overflow):**
+    -   Replace `X.Y.Z` with the specific version number you require. Pro tip: Check online for the latest stable version to avoid bugs that might be funnier than intended. Just kidding (or are we?).
 
-Navigate into the extracted directory:
+    **Configure and Build (with a Smidge of Magic, or Stack Overflow):**
 
-```bash
-cd c-client-X.Y.Z
-```
+    -   Navigate into the extracted directory:
 
-Now for the "magic incantation" (compilation flags) to potentially resolve the `implicit declaration of function 'safe_flock'` error:
+    ```bash
+    cd c-client-X.Y.Z
+    ```
 
-```bash
-CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types" ./configure
-```
+    -   Now for the "magic incantation" (compilation flags) to potentially resolve the `implicit declaration of function 'safe_flock'` error:
 
-This tells the compiler to ignore specific warnings. However, suppressing warnings can mask underlying issues. Proceed with caution and consider investigating the cause of these warnings if possible. Think of warnings like Yoda: sometimes cryptic, but their wisdom shouldn't be ignored!
+    ```bash
+    CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types" ./configure
+    ```
 
-**Alternative Compilation Flags:**
+    -   This tells the compiler to ignore specific warnings. However, suppressing warnings can mask underlying issues. Proceed with caution and consider investigating the cause of these warnings if possible. Think of warnings like Yoda: sometimes cryptic, but their wisdom shouldn't be ignored!
 
-While these flags might feel like the compiler equivalent of duct tape, remember that suppressing warnings is generally not recommended. It's better to fix the root cause to ensure your code is solid.
+    **Alternative Compilation Flags:**
 
-**Dependency Management:**
+    -   While these flags might feel like the compiler equivalent of duct tape, remember that suppressing warnings is generally not recommended. It's better to fix the root cause to ensure your code is solid.
 
-Before you embark on this compilation adventure, ensure you have all the necessary dependencies installed. Use `pacman` to check for missing packages. It's like checking your backpack before a coding quest – you don't want to realize you're missing essential libraries halfway through!
+    **Dependency Management:**
 
-**Try compiling with default flags in PKGBUILT first:** The error you're facing might have been fixed since this guide was written. No need to reinvent the wheel (unless you're feeling particularly creative, like writing your own operating system from scratch).
+    -   Before you embark on this compilation adventure, ensure you have all the necessary dependencies installed. Use `pacman` to check for missing packages. It's like checking your backpack before a coding quest – you don't want to realize you're missing essential libraries halfway through!
 
-**If you encounter errors, use the flags mentioned above.** Remember, Stack Overflow is always a helpful companion on your compilation journey. Think of it as the online forum where you can find the wisdom of the coding collective.
+    -   **Try compiling with default flags in PKGBUILT first:** The error you're facing might have been fixed since this guide was written. No need to reinvent the wheel (unless you're feeling particularly creative, like writing your own operating system from scratch).
 
-**Installation (with a Touch of Caution):**
+    -   **If you encounter errors, use the flags mentioned above.** Remember, Stack Overflow is always a helpful companion on your compilation journey. Think of it as the online forum where you can find the wisdom of the coding collective.
 
-**Important:** Manual installation can potentially conflict with existing system packages. It's generally recommended to use the pre-built binary or your package manager for safe and reliable installation.
+    **Installation (with a Touch of Caution):**
 
-If you choose to proceed, use `sudo make install` with caution:
+    -   **Important:** Manual installation can potentially conflict with existing system packages. It's generally recommended to use the pre-built binary or your package manager for safe and reliable installation.
 
-```bash
-sudo make install
-```
+    -   If you choose to proceed, use `sudo make install` with caution:
 
-This installs the compiled c-client library into your system's default library directory. Remember, with great compilation power comes great responsibility!
+        ```bash
+        sudo make install
+        ```
 
-**Remember:** Manual compilation can be a complex process. If you encounter difficulties, consider consulting online resources or seeking help from the Arch Linux community forums. They're like the Jedi Council of the Linux world, always willing to guide you through the compilation labyrinth.
+    This installs the compiled c-client library into your system's default library directory. Remember, with great compilation power comes great responsibility!
+
+    **Remember:** Manual compilation can be a complex process. If you encounter difficulties, consider consulting online resources or seeking help from the Arch Linux community forums. They're like the Jedi Council of the Linux world, always willing to guide you through the compilation labyrinth.
