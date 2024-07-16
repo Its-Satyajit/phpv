@@ -119,7 +119,6 @@ Here's the updated "Manual Compilation for the Intrepid" section with current hu
 
     -   Extract the downloaded source code archive using `tar`:
 
-
         ```bash
         tar -zxvf c-client-X.Y.Z.tar.gz
         ```
@@ -130,15 +129,15 @@ Here's the updated "Manual Compilation for the Intrepid" section with current hu
 
     -   Navigate into the extracted directory:
 
-    ```bash
-    cd c-client-X.Y.Z
-    ```
+        ```bash
+        cd c-client-X.Y.Z
+        ```
 
     -   Now for the "magic incantation" (compilation flags) to potentially resolve the `implicit declaration of function 'safe_flock'` error:
 
-    ```bash
-    CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types" ./configure
-    ```
+        ```bash
+        CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types" ./configure
+        ```
 
     -   This tells the compiler to ignore specific warnings. However, suppressing warnings can mask underlying issues. Proceed with caution and consider investigating the cause of these warnings if possible. Think of warnings like Yoda: sometimes cryptic, but their wisdom shouldn't be ignored!
 
