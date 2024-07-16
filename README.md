@@ -1,12 +1,12 @@
 ## PHP Version Management Made Fun: Conquering PHP with PHPV on Arch Linux (and Avoiding Hilarious Developer Mishaps)
 
-### Introduction:
+### Introduction
 
 Greetings, fellow coders! Struggling to manage PHP versions on your Arch Linux system (like Manjaro, EndeavourOS, Garuda Linux, and ArcoLinux)? Wish switching PHP versions wasn't a labyrinthine adventure? Fear not, for PHPV has arrived to simplify your PHP life, with a touch of programmer humor on the side.
 
-#### Installation Guide:
+### Installation Guide
 
-##### Downloading PHPV:
+#### Downloading PHPV
 
 Embrace the command line for a quick and efficient installation:
 
@@ -14,7 +14,7 @@ Embrace the command line for a quick and efficient installation:
 curl -sSL https://raw.githubusercontent.com/Its-Satyajit/phpv/main/install.sh | bash
 ```
 
-##### Manual Installation (Optional):
+#### Manual Installation (Optional)
 
 For the adventurous, here's the manual route:
 
@@ -51,9 +51,9 @@ For the adventurous, here's the manual route:
     source ~/.bashrc  # Replace with your appropriate shell command
     ```
 
-### Uses:
+### Uses
 
-#### Installing/Updating/Reinstall PHP Versions:
+#### Installing/Updating/Reinstall PHP Versions
 
 Need the latest PHP version or just a change of pace? PHPV can help:
 
@@ -71,7 +71,7 @@ Replace `<version>` with the desired shorthand (e.g., 80 for 8.0, 74 for 7.4). R
 
 ![](assets/20240716_210224_update_10.png)
 
-#### Switching PHP Versions:
+#### Switching PHP Versions
 
 Switching versions is a breeze:
 
@@ -85,11 +85,11 @@ Pick your weapon (version shorthand), and PHPV handles the rest. Debugging shoul
 
 ![](assets/20240716_210340_switch_10.png)
 
-### Troubleshooting:
+### Troubleshooting
 
 **Having trouble with the c-client dependency? This section outlines the manual installation steps. If you're new to compiling, consider the pre-built binary or seeking help online.**
 
-#### Pre-built Binary for Easy Resolution:
+#### Pre-built Binary for Easy Resolution
 
 Why waste time compiling? Download the pre-built c-client binary directly from PHPV:
 
@@ -108,11 +108,11 @@ Downloaded the binary but have doubts? Verify its integrity using these hash val
 
 For additional peace of mind, use VirusTotal for verification.
 
-#### Manual Compilation (Advanced Users Only):
+#### Manual Compilation (Advanced Users Only)
 
 **Disclaimer:** Manual compilation can introduce conflicts with existing system packages. It's generally recommended using the pre-built binary or your system's package manager (e.g., pacman) for a safer and more reliable installation. If you're comfortable with the risks and possess advanced Linux knowledge, proceed with caution. Consider consulting online resources or the Arch Linux forums for help if needed.
 
-**For Users Comfortable with Manual Compilation:**
+**For Users Comfortable with Manual Compilation**
 
 Here's a step-by-step guide for those who prefer manual compilation:
 
