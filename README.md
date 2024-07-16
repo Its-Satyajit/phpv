@@ -1,10 +1,10 @@
-**PHP Version Management Made Fun: Conquering PHP with PHPV on Arch Linux (and Avoiding Hilarious Developer Mishaps)**
+# PHP Version Management Made Fun: Conquering PHP with PHPV on Arch Linux (and Avoiding Hilarious Developer Mishaps)
 
-**Humor-Infused Introduction:**
+### **Humor-Infused Introduction:**
 
 Greetings, fellow coders! Are you tired of wrestling with PHP version management on your Arch Linux system? (like Manjaro, EndeavourOS, Garuda Linux, and ArcoLinux) Do you dream of a world where switching PHP versions doesn't feel like navigating a labyrinth blindfolded while being chased by a compiler error? Fret no more, for PHPV has arrived to vanquish your PHP woes with a dash of programmer humor!
 
-**Installation Guide (Keeping the Fun Alive):**
+### **Installation Guide (Keeping the Fun Alive):**
 
 **Step 1: Downloading PHPV**
 
@@ -58,7 +58,7 @@ Just remember, with great power (PHPV) comes great responsibility (maintaining a
     source "$HOME/.bashrc"  # Replace with your appropriate shell command
     ```
 
-**Using PHPV (Like a Boss):**
+### **Using PHPV (Like a Boss):**
 
 **Installing/Updating PHP Versions (No More PHP-induced Nightmares):**
 
@@ -80,7 +80,7 @@ phpv <version>
 
 Pick your weapon (version shorthand), and let PHPV handle the rest. Debugging should be an adventure, not a soul-crushing experience.
 
-**Troubleshooting (Because Murphy's Law Applies to Coding Too):**
+### **Troubleshooting (Because Murphy's Law Applies to Coding Too):**
 
 Encountering cryptic c-client compilation errors? Fear not, fellow coder! PHPV offers solutions to vanquish these woes. Let's explore your options:
 
