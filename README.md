@@ -1,4 +1,4 @@
-# PHP Version Management Made Fun: Conquering PHP with PHPV on Arch Linux (and Avoiding Hilarious Developer Mishaps)
+## PHP Version Management Made Fun: Conquering PHP with PHPV on Arch Linux (and Avoiding Hilarious Developer Mishaps)
 
 ### **Humor-Infused Introduction:**
 
