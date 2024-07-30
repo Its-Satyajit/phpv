@@ -1,28 +1,32 @@
-## PHP Version Management Made Fun: Conquering PHP with PHPV on Arch Linux (and Avoiding Hilarious Developer Mishaps)
+## PHP Version Management Using PHPV on Arch Linux
 
 ### Introduction
 
-Greetings, fellow coders! Struggling to manage PHP versions on your Arch Linux system (like Manjaro, EndeavourOS, Garuda Linux, and ArcoLinux)? Wish switching PHP versions wasn't a labyrinthine adventure? Fear not, for PHPV has arrived to simplify your PHP life, with a touch of programmer humor on the side.
+Managing PHP versions on Arch Linux systems (including Manjaro, EndeavourOS, Garuda Linux, and ArcoLinux) can be challenging. This comprehensive tutorial introduces PHPV, a tool designed to simplify the process of installing, updating, and switching PHP versions efficiently. Follow these steps to streamline your PHP version management on Arch Linux.
 
 ### Installation Guide
 
 #### Downloading PHPV
 
-Embrace the command line for a quick and efficient installation:
+For a quick and efficient installation, use the following command:
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/Its-Satyajit/phpv/main/install.sh | bash
 ```
 
+**Tip:** Ensure you have `curl` installed on your system. If not, install it using `sudo pacman -S curl`.
+
 #### Manual Installation (Optional)
 
-For the adventurous, here's the manual route:
+Follow these steps for manual installation:
 
 1. **Clone the Repository:**
 
     ```bash
     git clone https://github.com/Its-Satyajit/phpv.git
     ```
+
+    **Suggestion:** Verify that `git` is installed. If not, install it with `sudo pacman -S git`.
 
 2. **Navigate and Grant Permissions:**
 
@@ -31,19 +35,25 @@ For the adventurous, here's the manual route:
     chmod +x phpv
     ```
 
+    **Tip:** Always check the permissions of the script before executing it to ensure it’s safe to run.
+
 3. **Install PHPV:**
 
     ```bash
     mv phpv $HOME/bin/phpv
     ```
 
+    **Suggestion:** If `$HOME/bin` does not exist, create it using `mkdir -p $HOME/bin`.
+
 4. **Update Shell Configuration:**
 
-    Add this line to your shell configuration file (e.g., ~/.bashrc, ~/.bash_profile):
+    Add the following line to your shell configuration file (e.g., ~/.bashrc, ~/.bash_profile):
 
     ```bash
     export PATH="$HOME/bin:$PATH"
     ```
+
+    **Tip:** Use a text editor like `nano` or `vim` to edit your shell configuration file. For example, `nano ~/.bashrc`.
 
 5. **Refresh Terminal:**
 
@@ -51,17 +61,21 @@ For the adventurous, here's the manual route:
     source ~/.bashrc  # Replace with your appropriate shell command
     ```
 
-### Uses
+    **Suggestion:** If you use a different shell, update the corresponding configuration file (e.g., `~/.zshrc` for Zsh).
 
-#### Installing/Updating/Reinstall PHP Versions
+### Usage
 
-Need the latest PHP version or just a change of pace? PHPV can help:
+#### Installing/Updating/Reinstalling PHP Versions
+
+To install, update, or reinstall PHP versions, use the following command:
 
 ```bash
 phpv -i <version>
 ```
 
-Replace `<version>` with the desired shorthand (e.g., 80 for 8.0, 74 for 7.4). Remember, with great PHP power comes the responsibility to write clean, bug-free code.
+Replace `<version>` with the desired shorthand (e.g., 80 for 8.0, 74 for 7.4).
+
+**Tip:** Always check for the latest PHP versions and their shorthand notations to keep your environment up to date.
 
 **Install**
 
@@ -73,13 +87,15 @@ Replace `<version>` with the desired shorthand (e.g., 80 for 8.0, 74 for 7.4). R
 
 #### Switching PHP Versions
 
-Switching versions is a breeze:
+To switch PHP versions, use the following command:
 
 ```bash
 phpv <version>
 ```
 
-Pick your weapon (version shorthand), and PHPV handles the rest. Debugging should be an adventure, not a nightmare.
+Replace `<version>` with the desired shorthand.
+
+**Suggestion:** After switching versions, verify the PHP version with `php -v` to ensure the correct version is active.
 
 **Switch**
 
@@ -87,58 +103,60 @@ Pick your weapon (version shorthand), and PHPV handles the rest. Debugging shoul
 
 ### Troubleshooting
 
-**Having trouble with the c-client dependency? This section outlines the manual installation steps. If you're new to compiling, consider the pre-built binary or seeking help online.**
+If you encounter issues with the c-client dependency, follow the steps outlined below for manual installation.
 
 #### Pre-built Binary for Easy Resolution
 
-Why waste time compiling? Download the pre-built c-client binary directly from PHPV:
+Download the pre-built c-client binary from PHPV:
 
--   [c-client-2007f-20-x86_64.pkg.tar.zst](https://github.com/Its-Satyajit/phpv/blob/main/c-client/c-client-2007f-20-x86_64.pkg.tar.zsthttps:/)
-
-This is the recommended approach for most users, saving you time and compilation headaches.
+-   [c-client-2007f-20-x86_64.pkg.tar.zst](https://github.com/Its-Satyajit/phpv/blob/main/c-client/c-client-2007f-20-x86_64.pkg.tar.zst)
 
 **Verification (Optional):**
 
-Downloaded the binary but have doubts? Verify its integrity using these hash values:
+Verify the binary's integrity using the following hash values:
 
 -   MD5: 96d92a8b98afd78d2f2c80f8b0d76473
 -   SHA1: 4451582984bf02b1b78425b75100ca20018c8557
 -   SHA256: c6c9a0a411f476be1357f5aad8db897ce4d47f3f78757acd2aade3e477e2fe4d
 -   SHA512: 9628031b0f0efe4024c515f0a882418d7665b3267644f3bf0f12adbc5f200a9cca3049ab218be176ae8562673edca46190ca44de1154a32e0bf828028470ef1e
 
-For additional peace of mind, use VirusTotal for verification.
+For additional verification, use VirusTotal.
 
 #### Manual Compilation (Advanced Users Only)
 
-**Disclaimer:** Manual compilation can introduce conflicts with existing system packages. It's generally recommended using the pre-built binary or your system's package manager (e.g., pacman) for a safer and more reliable installation. If you're comfortable with the risks and possess advanced Linux knowledge, proceed with caution. Consider consulting online resources or the Arch Linux forums for help if needed.
+**Disclaimer:** Manual compilation can introduce conflicts with existing system packages. It is recommended to use the pre-built binary or your system's package manager (e.g., pacman) for a safer installation.
 
-**For Users Comfortable with Manual Compilation**
-
-Here's a step-by-step guide for those who prefer manual compilation:
+**Manual Compilation Steps:**
 
 1. **Gather Your Tools:**
 
-    Ensure you have the necessary development tools installed on your Arch Linux system. You'll typically need:
+    Ensure you have the necessary development tools installed:
 
-    - `make`: A tool for automating compilation tasks.
-    - A C compiler: Most commonly `gcc` is used for compiling C code.
-    - Development headers for system libraries: These provide header files needed for compilation. These are usually installed with the `pacman -S base-devel` command.
+    - `make`
+    - A C compiler (e.g., `gcc`)
+    - Development headers for system libraries (`pacman -S base-devel`)
+
+    **Suggestion:** Use `sudo pacman -S base-devel` to install essential development tools.
 
 2. **Download the Source Code:**
 
-    Access the official c-client source code repository: [https://gitweb.gentoo.org/repo/gentoo.git/tree/](https://gitweb.gentoo.org/repo/gentoo.git/tree/) (May the source be with you!)
+    Access the official c-client source code repository: [https://gitweb.gentoo.org/repo/gentoo.git/tree/](https://gitweb.gentoo.org/repo/gentoo.git/tree/)
+
+    **Tip:** Always download the latest stable version to ensure compatibility and security.
 
 3. **Unpack the Source:**
 
-    Extract the downloaded source code archive using `tar`:
+    Extract the source code archive:
 
     ```bash
     tar -zxvf c-client-X.Y.Z.tar.gz
     ```
 
-    Replace `X.Y.Z` with the specific version number you require. Pro-tip: Check online for the latest stable version to avoid potentially buggy surprises.
+    Replace `X.Y.Z` with the specific version number.
 
-4. **Configure and Build (with Caution):**
+    **Suggestion:** Use the `ls` command to verify the contents of the extracted directory.
+
+4. **Configure and Build:**
 
     Navigate into the extracted directory:
 
@@ -146,38 +164,30 @@ Here's a step-by-step guide for those who prefer manual compilation:
     cd c-client-X.Y.Z
     ```
 
-    Now for the "magic incantation" (compilation flags) to potentially resolve the implicit declaration of function 'safe_flock' error:
+    Configure and build with specific flags:
 
     ```bash
     CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types" ./configure
     ```
 
-    This tells the compiler to ignore specific warnings. However, suppressing warnings can mask underlying issues. Proceed with caution and consider investigating the cause of these warnings if possible. Think of warnings like Yoda: sometimes cryptic, but their wisdom shouldn't be ignored!
+    **Warning:** Suppressing warnings can mask underlying issues. It is recommended to investigate the cause of these warnings and fix them if possible.
 
-    **Alternative Compilation Flags:**
-
-    While these flags might seem like a compiler shortcut, remember that suppressing warnings is generally not recommended. It's better to fix the root cause to ensure your code is solid.
+    **Tip:** Use `./configure --help` to see all available configuration options.
 
 5. **Dependency Management:**
 
-    Before you embark on this compilation adventure, ensure you have all the necessary dependencies installed. Use `pacman` to check for missing packages. It's like checking your backpack before a coding quest – you don't want to realize you're missing essential libraries halfway through!
+    Ensure all necessary dependencies are installed. Use `pacman` to check for missing packages.
 
-    Try compiling with default flags in PKGBUILT first. The error you're facing might have been fixed since this guide was written. No need to reinvent the wheel (unless you're feeling particularly creative, like writing your own operating system from scratch).
+    **Suggestion:** Before starting the compilation, use `sudo pacman -Syu` to update your system and installed packages.
 
-    If you encounter errors, use the flags mentioned above. Remember, Stack Overflow is always a helpful companion on your compilation journey. Think of it as the online forum where you can find the wisdom of the coding collective.
+6. **Installation:**
 
-6. **Installation (with a Touch of Caution):**
-
-    Important: Manual installation can potentially conflict with existing system packages. It's generally recommended to use the pre-built binary or your package manager for safe and reliable installation.
-
-    If you choose to proceed, use `sudo make install` with caution:
+    If you choose to proceed with manual installation, use `sudo make install`:
 
     ```bash
     sudo make install
     ```
 
-    This installs the compiled c-client library into your system's default library directory. Remember, with great compilation power comes great responsibility!
+    **Tip:** Always review the `Makefile` before running `make install` to understand the installation process.
 
-7. **Remember:** Manual compilation can be a complex process. If you encounter difficulties, consider consulting online resources or seeking help from the Arch Linux community forums. They're like the Jedi Council of the Linux world, always willing to guide you through the compilation labyrinth.
-
-By following these steps and understanding the potential risks, you can manually compile the c-client library for PHPV. However, for most users, the pre-built binary or using the system's package manager is the safer and more recommended approach.
+By following these steps, you can manually compile the c-client library for PHPV. However, for most users, the pre-built binary or using the system's package manager is the recommended approach.
