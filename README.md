@@ -101,6 +101,14 @@ phpv -i <version> --build
 
 Example: `phpv -i 81 -b`
 
+#### Skipping Tests
+
+If the installation fails during the testing phase (common with some extensions like `imagick`), you can skip tests using `--nocheck`:
+
+```bash
+phpv -e imagick 81 --nocheck
+```
+
 #### Installing PHP Extensions
 
 To install PHP extensions (e.g., imagick, redis) for a specific PHP version, use the `-e` flag:
@@ -129,7 +137,12 @@ Replace `<version>` with the desired shorthand.
 
 ### Troubleshooting
 
-If you encounter issues with the c-client dependency, follow the steps outlined below for manual installation.
+### Troubleshooting
+
+#### c-client Dependency
+PHPV automatically detects if `c-client` is missing and attempts to install it for you using the prebuilt binary from this repository. You typically don't need to do anything.
+
+However, if the automatic installation fails, you can follow the manual steps below.
 
 #### Pre-built Binary for Easy Resolution
 

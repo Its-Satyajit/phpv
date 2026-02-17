@@ -137,7 +137,15 @@ build_and_install_php() {
 
   # Explicitly skipping PGP check can sometimes help with old AUR keys, but standard is secure.
   # Using --noconfirm to avoid interactive prompts which break automation.
-  makepkg -si --noconfirm || {
+  # Using --cleanbuild to remove the build directory ($srcdir/) before starting (or after packaging with -c),
+  # ensuring a fresh build environment and preventing errors on re-runs (like prepare() failing).
+  local makepkg_args="-si --noconfirm --cleanbuild"
+  if [ "$NO_CHECK" == "true" ]; then
+    makepkg_args="$makepkg_args --nocheck"
+    print_warning "Skipping tests as requested..."
+  fi
+
+  makepkg $makepkg_args || {
     print_error "Failed the incantation to build or install PHP version $version. Did someone mispronounce 'makepkg'?"
     exit 1
   }
@@ -224,7 +232,17 @@ install_extension() {
   fi
 
   print_info "Building and installing usage makepkg..."
-  makepkg -si --noconfirm || {
+  local makepkg_args="-si --noconfirm --cleanbuild"
+  if [ "$NO_CHECK" == "true" ]; then
+    makepkg_args="$makepkg_args --nocheck"
+    print_warning "Skipping tests as requested..."
+  fi
+
+  # Manual cleanup to be absolutely sure
+  print_info "Sweeping away old build artifacts (src/ pkg/)..."
+  rm -rf src pkg
+
+  makepkg $makepkg_args || {
     print_error "Failed to build/install extension ${package_name}."
     exit 1
   }
@@ -255,6 +273,7 @@ switch_php_version() {
 # Main script logic
 
 FORCE_BUILD="false"
+NO_CHECK="false"
 
 # Check arguments
 while [[ $# -gt 0 ]]; do
@@ -278,6 +297,10 @@ while [[ $# -gt 0 ]]; do
       FORCE_BUILD="true"
       shift
       ;;
+    --nocheck)
+      NO_CHECK="true"
+      shift
+      ;;
     -*)
       print_error "Unknown magic spell: $1"
       exit 1
@@ -299,6 +322,7 @@ if [ -z "$action" ]; then
   print_info "Magic instructions:"
   print_info "  $0 -i <version>              : Install/Update PHP version"
   print_info "  $0 -i <version> --build      : Force build from source (ignore binary)"
+  print_info "  $0 -i <version> --nocheck    : Skip tests during build"
   print_info "  $0 -e <extension> <version>  : Install PHP extension (e.g., 'imagick 81')"
   print_info "  $0 <version>                 : Switch to PHP version"
   print_info "  $0 -v                        : Show version"
