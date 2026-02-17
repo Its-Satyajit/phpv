@@ -1,1 +1,349 @@
-1.2.0
+#!/bin/bash
+
+# Color definitions
+VERSION="1.1.0"
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Function to print colored messages with a touch of humor
+print_error() {
+  echo -e "${RED}Oops... $1${NC}"
+}
+
+print_warning() {
+  echo -e "${YELLOW}Hold on... $1${NC}"
+}
+
+print_success() {
+  echo -e "${GREEN}Ta-da! $1${NC}"
+}
+
+print_info() {
+  echo -e "${BLUE}FYI: $1${NC}"
+}
+
+# Function to clone or update PHP version from AUR
+clone_or_update_php() {
+  local version="$1"
+  local aur_repo="https://aur.archlinux.org/php${version}.git"
+  local install_dir="$HOME/src/php${version}"
+
+  # Create source directory if it doesn't exist
+  if [ ! -d "$HOME/src" ]; then
+    mkdir -p "$HOME/src" || {
+      print_error "Failed to create directory $HOME/src. Did the gnomes run off?"
+      exit 1
+    }
+  fi
+
+  # Navigate to the source directory
+  cd "$HOME/src" || {
+    print_error "Could not find the path to $HOME/src. Are we lost in the enchanted forest?"
+    exit 1
+  }
+
+  # Check if directory exists and is not empty
+  if [ -d "$install_dir" ] && [ -n "$(ls -A $install_dir)" ]; then
+    print_info "Stirring up some magic to update PHP version $version..."
+    cd "$install_dir" || {
+      print_error "Lost the path to $install_dir. Maybe a map spell will help?"
+      exit 1
+    }
+    # Attempt to pull changes from 'master' branch first
+    if ! git pull origin master; then
+      # If 'master' branch fails, try 'main' branch
+      print_info "Trying 'main' branch... Abracadabra!"
+      if ! git pull origin main; then
+        print_error "Failed to pull latest changes from $aur_repo. Perhaps a stronger potion is needed?"
+        exit 1
+      fi
+    fi
+  else
+    print_info "Conjuring PHP version $version from $aur_repo... *poof!*"
+    git clone "$aur_repo" "$install_dir" || {
+      print_error "Oops, the magic circle was broken! Failed to clone PHP version ${version} from AUR."
+      exit 1
+    }
+    cd "$install_dir" || {
+      print_error "Teleportation spell malfunction! Can't find $install_dir."
+      exit 1
+    }
+  fi
+}
+
+# Function to check if package exists in repositories and install it
+install_via_pacman() {
+  local package="$1"
+  if pacman -Si "$package" &>/dev/null; then
+    print_info "Found prebuilt binary for $package! Installing via pacman..."
+    sudo pacman -S --noconfirm "$package" || return 1
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Function to install c-client if missing
+install_c_client() {
+  if pacman -Qi c-client &>/dev/null; then
+    return 0
+  fi
+
+  print_info "c-client dependency is missing (required for PHP build)."
+  print_info "Downloading prebuilt c-client from official repository..."
+
+  local c_client_url="https://github.com/Its-Satyajit/phpv/raw/main/c-client/c-client-2007f-20-x86_64.pkg.tar.zst"
+  local c_client_file="/tmp/c-client-2007f-20-x86_64.pkg.tar.zst"
+
+  if curl -L -o "$c_client_file" "$c_client_url"; then
+      print_info "Installing c-client..."
+      if sudo pacman -U --noconfirm "$c_client_file"; then
+           print_success "c-client installed successfully!"
+           return 0
+      else
+           print_error "Failed to install c-client via pacman."
+           return 1
+      fi
+  else
+      print_error "Failed to download c-client from GitHub."
+      return 1
+  fi
+}
+
+# Function to build and install PHP version using makepkg
+build_and_install_php() {
+  local version="$1"
+
+  # Try to install via pacman first if --build is not set
+  if [ "$FORCE_BUILD" != "true" ]; then
+    if install_via_pacman "php${version}"; then
+      print_success "Installed PHP ${version} via pacman!"
+      return 0
+    fi
+    print_info "Prebuilt binary not found. Falling back to AUR build..."
+  fi
+
+  # Ensure c-client is installed
+  install_c_client || {
+      print_error "Failed to handle c-client dependency. Build might fail."
+      # We don't exit here, let makepkg try/fail so user sees the native error too
+  }
+
+  print_info "Mixing potions to build and install PHP version $version..."
+  print_info "This may take a while... Gather 'round, wizards!"
+
+  # Explicitly skipping PGP check can sometimes help with old AUR keys, but standard is secure.
+  # Using --noconfirm to avoid interactive prompts which break automation.
+  # Using --cleanbuild to remove the build directory ($srcdir/) before starting (or after packaging with -c),
+  # ensuring a fresh build environment and preventing errors on re-runs (like prepare() failing).
+  local makepkg_args="-si --noconfirm --cleanbuild"
+  if [ "$NO_CHECK" == "true" ]; then
+    makepkg_args="$makepkg_args --nocheck"
+    print_warning "Skipping tests as requested..."
+  fi
+
+  makepkg $makepkg_args || {
+    print_error "Failed the incantation to build or install PHP version $version. Did someone mispronounce 'makepkg'?"
+    exit 1
+  }
+}
+
+
+# Function to create symbolic links for PHP binaries
+create_symlinks() {
+  local version="$1"
+
+  # List of binaries to link
+  # local binaries=(php php-cgi php-config phpize php-fpm phpdbg pear pecl)
+  local binaries=(php php-cgi php-config phpize php-fpm phpdbg)
+
+  # Remove existing symbolic links
+  for bin in "${binaries[@]}"; do
+    rm -f "${HOME}/bin/${bin}"
+  done
+
+  # Create new symbolic links for the installed PHP version
+  for bin in "${binaries[@]}"; do
+    local bin_path
+    bin_path=$(command -v "${bin}${version}")
+    if [ -n "$bin_path" ]; then
+      ln -s "$bin_path" "${HOME}/bin/${bin}" || {
+        print_warning "Failed to weave a symbolic link for $bin. Are the threads tangled?"
+      }
+    else
+      print_warning "The rune stone for ${bin}${version} is missing. Check the ancient archives."
+    fi
+  done
+
+  # Verify symbolic links creation
+  if [ $? -eq 0 ]; then
+    print_success "Hocus pocus! Switched to PHP version ${version}."
+  else
+    print_error "The mystical threads snapped! Failed to create symbolic links for PHP version ${version}."
+    exit 1
+  fi
+}
+
+# Function to install PHP extension
+install_extension() {
+  local extension="$1"
+  local version="$2"
+  local package_name="php${version}-${extension}"
+  local aur_repo="https://aur.archlinux.org/${package_name}.git"
+  local install_dir="$HOME/src/${package_name}"
+
+  print_info "Preparing to install extension: ${extension} for PHP ${version}..."
+
+  # Try to install via pacman first if --build is not set
+  if [ "$FORCE_BUILD" != "true" ]; then
+    if install_via_pacman "${package_name}"; then
+      print_success "Extension ${extension} for PHP ${version} installed via pacman!"
+      return 0
+    fi
+    print_info "Prebuilt binary not found. Falling back to AUR build..."
+  fi
+
+  # Create source directory if it doesn't exist
+  if [ ! -d "$HOME/src" ]; then
+    mkdir -p "$HOME/src" || {
+      print_error "Failed to create directory $HOME/src."
+      exit 1
+    }
+  fi
+
+  # Check if directory exists and is not empty
+  if [ -d "$install_dir" ] && [ -n "$(ls -A $install_dir)" ]; then
+    print_info "Updating existing extension source..."
+    cd "$install_dir" || exit 1
+    git pull origin master || git pull origin main || {
+      print_error "Failed to update extension source."
+      exit 1
+    }
+  else
+    print_info "Cloning extension from ${aur_repo}..."
+    git clone "$aur_repo" "$install_dir" || {
+      print_error "Failed to clone extension repository. Does it exist in AUR?"
+      exit 1
+    }
+    cd "$install_dir" || exit 1
+  fi
+
+  print_info "Building and installing usage makepkg..."
+  local makepkg_args="-si --noconfirm --cleanbuild"
+  if [ "$NO_CHECK" == "true" ]; then
+    makepkg_args="$makepkg_args --nocheck"
+    print_warning "Skipping tests as requested..."
+  fi
+
+  # Manual cleanup to be absolutely sure
+  print_info "Sweeping away old build artifacts (src/ pkg/)..."
+  rm -rf src pkg
+
+  makepkg $makepkg_args || {
+    print_error "Failed to build/install extension ${package_name}."
+    exit 1
+  }
+
+  print_success "Extension ${extension} for PHP ${version} installed successfully!"
+}
+
+# Function to switch PHP version
+switch_php_version() {
+  local version="$1"
+
+  # Check if PHP binary exists for the specified version
+  if ! command -v "php${version}" &>/dev/null; then
+    print_error "The crystal ball reveals that PHP version ${version} is not installed."
+    exit 1
+  fi
+
+  # Create symbolic links for the PHP version
+  create_symlinks "$version"
+
+  # Verify PHP version after switching
+  print_info "Conjuring spirits to verify PHP version..."
+  php -v
+}
+
+# Main script logic
+
+# Main script logic
+
+FORCE_BUILD="false"
+NO_CHECK="false"
+
+# Check arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -i)
+      action="install_or_update"
+      version="$2"
+      shift 2
+      ;;
+    -e)
+      action="install_extension"
+      extension="$2"
+      version="$3"
+      shift 3
+      ;;
+    -v|--version)
+      echo "PHPV Version: $VERSION"
+      exit 0
+      ;;
+    -b|--build)
+      FORCE_BUILD="true"
+      shift
+      ;;
+    --nocheck)
+      NO_CHECK="true"
+      shift
+      ;;
+    -*)
+      print_error "Unknown magic spell: $1"
+      exit 1
+      ;;
+    *)
+      if [ -z "$action" ]; then
+        action="switch"
+        version="$1"
+        shift
+      else
+        print_error "Too many ingredients in the cauldron!"
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+if [ -z "$action" ]; then
+  print_info "Magic instructions:"
+  print_info "  $0 -i <version>              : Install/Update PHP version"
+  print_info "  $0 -i <version> --build      : Force build from source (ignore binary)"
+  print_info "  $0 -i <version> --nocheck    : Skip tests during build"
+  print_info "  $0 -e <extension> <version>  : Install PHP extension (e.g., 'imagick 81')"
+  print_info "  $0 <version>                 : Switch to PHP version"
+  print_info "  $0 -v                        : Show version"
+  exit 1
+fi
+
+
+case "$action" in
+install_or_update)
+  clone_or_update_php "$version"
+  build_and_install_php "$version"
+  create_symlinks "$version"
+  ;;
+install_extension)
+  install_extension "$extension" "$version"
+  ;;
+switch)
+  switch_php_version "$version"
+  ;;
+*)
+  print_error "The cauldron is bubbling with unknown commands: $action"
+  exit 1
+  ;;
+esac
