@@ -85,6 +85,22 @@ Replace `<version>` with the desired shorthand (e.g., 80 for 8.0, 74 for 7.4).
 
 ![](assets/20240716_210224_update_10.png)
 
+#### Smart Install (Binary Support)
+
+By default, `phpv` tries to install prebuilt binaries using `pacman` (if available in your configured repositories, like Chaotic-AUR). This saves time by avoiding compilation.
+
+If a prebuilt binary is not found, it automatically falls back to building from the AUR.
+
+#### Force Build from Source
+
+If you prefer to compile from source (skipping the binary check), use the `--build` (or `-b`) flag:
+
+```bash
+phpv -i <version> --build
+```
+
+Example: `phpv -i 81 -b`
+
 #### Installing PHP Extensions
 
 To install PHP extensions (e.g., imagick, redis) for a specific PHP version, use the `-e` flag:
