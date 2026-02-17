@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Color definitions
-VERSION="1.1.0"
+VERSION="1.3.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
