@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/Its-Satyajit/phpv/compare/phpv-v1.3.0...phpv-v1.4.0) (2026-02-17)
+
+
+### Features
+
+* **php:** Add system default PHP switching functionality ([928c557](https://github.com/Its-Satyajit/phpv/commit/928c557126f06d17583e9f4a3dac0702c47ee90a))
+
 ## [1.3.0](https://github.com/Its-Satyajit/phpv/compare/phpv-v1.2.1...phpv-v1.3.0) (2026-02-17)
 
 
