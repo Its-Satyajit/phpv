@@ -113,6 +113,22 @@ install_c_client() {
   fi
 }
 
+# Function to switch to system default PHP (remove symlinks)
+switch_to_system() {
+  print_info "Reverting to system default PHP..."
+
+  # List of binaries to unlink (must match create_symlinks)
+  local binaries=(php php-cgi php-config phpize php-fpm phpdbg)
+
+  for bin in "${binaries[@]}"; do
+    rm -f "${HOME}/bin/${bin}"
+  done
+
+  print_success "Symlinks removed. You are now using the system default PHP."
+  print_info "Verifying version..."
+  php -v
+}
+
 # Function to self-update phpv
 self_update() {
   print_info "Checking for updates..."
@@ -332,6 +348,10 @@ while [[ $# -gt 0 ]]; do
       action="self_update"
       shift
       ;;
+    system)
+      action="system"
+      shift
+      ;;
     -*)
       print_error "Unknown magic spell: $1"
       exit 1
@@ -356,6 +376,7 @@ if [ -z "$action" ]; then
   print_info "  $0 -i <version> --nocheck    : Skip tests during build"
   print_info "  $0 -e <extension> <version>  : Install PHP extension (e.g., 'imagick 81')"
   print_info "  $0 <version>                 : Switch to PHP version"
+  print_info "  $0 system                    : Revert to system default PHP"
   print_info "  $0 -u, --self-update         : Update phpv to the latest version"
   print_info "  $0 -v                        : Show version"
   exit 1
@@ -373,6 +394,9 @@ install_extension)
   ;;
 self_update)
   self_update
+  ;;
+system)
+  switch_to_system
   ;;
 switch)
   switch_php_version "$version"
