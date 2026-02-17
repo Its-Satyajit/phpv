@@ -145,6 +145,16 @@ To update `phpv` to the latest version from the repository:
 phpv --self-update
 ```
 
+### Checking Version
+
+To check the current installed version of `phpv`:
+
+```bash
+phpv -v
+# or
+phpv --version
+```
+
 ### Troubleshooting
 
 #### c-client Dependency
