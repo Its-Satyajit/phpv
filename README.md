@@ -137,6 +137,24 @@ Replace `<version>` with the desired shorthand.
 
 ### Troubleshooting
 
+![](assets/20240716_210340_switch_10.png)
+
+#### Revert to System PHP
+
+To switch back to the default PHP version installed by your system package manager (e.g., `pacman`):
+
+```bash
+phpv system
+```
+
+This removes the overrides created by `phpv`.
+
+To use a specific PHP version again, simply run:
+
+```bash
+phpv <version>
+```
+
 ### Updates
 
 To update `phpv` to the latest version from the repository:
