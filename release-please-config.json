@@ -5,7 +5,7 @@
 		".": {
 			"release-type": "simple",
 			"package-name": "phpv",
-			"version-file": "phpv",
+			"version-file": "VERSION",
 			"extra-files": ["phpv"]
 		}
 	}
