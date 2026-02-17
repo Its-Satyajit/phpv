@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/Its-Satyajit/phpv/compare/phpv-v1.2.0...phpv-v1.2.1) (2026-02-17)
+
+
+### Bug Fixes
+
+* **php:** Add comprehensive PHP version management script ([1c7d45d](https://github.com/Its-Satyajit/phpv/commit/1c7d45dff4a2b0f0818298714b94b41567144752))
+
 ## [1.2.0](https://github.com/Its-Satyajit/phpv/compare/phpv-v1.1.0...phpv-v1.2.0) (2026-02-17)
 
 
