@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Color definitions
+VERSION="1.1.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -119,6 +120,50 @@ create_symlinks() {
   fi
 }
 
+# Function to install PHP extension
+install_extension() {
+  local extension="$1"
+  local version="$2"
+  local package_name="php${version}-${extension}"
+  local aur_repo="https://aur.archlinux.org/${package_name}.git"
+  local install_dir="$HOME/src/${package_name}"
+
+  print_info "Preparing to install extension: ${extension} for PHP ${version}..."
+
+  # Create source directory if it doesn't exist
+  if [ ! -d "$HOME/src" ]; then
+    mkdir -p "$HOME/src" || {
+      print_error "Failed to create directory $HOME/src."
+      exit 1
+    }
+  fi
+
+  # Check if directory exists and is not empty
+  if [ -d "$install_dir" ] && [ -n "$(ls -A $install_dir)" ]; then
+    print_info "Updating existing extension source..."
+    cd "$install_dir" || exit 1
+    git pull origin master || git pull origin main || {
+      print_error "Failed to update extension source."
+      exit 1
+    }
+  else
+    print_info "Cloning extension from ${aur_repo}..."
+    git clone "$aur_repo" "$install_dir" || {
+      print_error "Failed to clone extension repository. Does it exist in AUR?"
+      exit 1
+    }
+    cd "$install_dir" || exit 1
+  fi
+
+  print_info "Building and installing usage makepkg..."
+  makepkg -si --noconfirm || {
+    print_error "Failed to build/install extension ${package_name}."
+    exit 1
+  }
+
+  print_success "Extension ${extension} for PHP ${version} installed successfully!"
+}
+
 # Function to switch PHP version
 switch_php_version() {
   local version="$1"
@@ -140,15 +185,33 @@ switch_php_version() {
 # Main script logic
 
 # Check if PHP version argument is provided
-if [ $# -ne 1 ] && [ $# -ne 2 ]; then
-  print_info "Magic instructions: $0 -i <version> to install/update | $0 <version> to switch."
+if [ $# -lt 1 ]; then
+  print_info "Magic instructions:"
+  print_info "  $0 -i <version>              : Install/Update PHP version"
+  print_info "  $0 -e <extension> <version>  : Install PHP extension (e.g., 'imagick 81')"
+  print_info "  $0 <version>                 : Switch to PHP version"
+  print_info "  $0 -v                        : Show version"
   exit 1
 fi
 
-if [ $# -eq 2 ] && [ "$1" == "-i" ]; then
+if [ "$1" == "-v" ] || [ "$1" == "--version" ]; then
+  echo "PHPV Version: $VERSION"
+  exit 0
+fi
+
+if [ "$1" == "-i" ] && [ $# -eq 2 ]; then
   action="install_or_update"
   version="$2"
+elif [ "$1" == "-e" ] && [ $# -eq 3 ]; then
+  action="install_extension"
+  extension="$2"
+  version="$3"
 elif [ $# -eq 1 ]; then
+  # check if the argument is not a flag
+  if [[ "$1" == -* ]]; then
+      print_error "Unknown magic spell: $1"
+      exit 1
+  fi
   action="switch"
   version="$1"
 else
@@ -161,6 +224,9 @@ install_or_update)
   clone_or_update_php "$version"
   build_and_install_php "$version"
   create_symlinks "$version"
+  ;;
+install_extension)
+  install_extension "$extension" "$version"
   ;;
 switch)
   switch_php_version "$version"

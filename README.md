@@ -85,6 +85,16 @@ Replace `<version>` with the desired shorthand (e.g., 80 for 8.0, 74 for 7.4).
 
 ![](assets/20240716_210224_update_10.png)
 
+#### Installing PHP Extensions
+
+To install PHP extensions (e.g., imagick, redis) for a specific PHP version, use the `-e` flag:
+
+```bash
+phpv -e <extension> <version>
+```
+
+Example: `phpv -e imagick 81` will install `php81-imagick` from the AUR.
+
 #### Switching PHP Versions
 
 To switch PHP versions, use the following command:
