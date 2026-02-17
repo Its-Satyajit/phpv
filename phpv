@@ -113,6 +113,33 @@ install_c_client() {
   fi
 }
 
+# Function to self-update phpv
+self_update() {
+  print_info "Checking for updates..."
+  local update_url="https://raw.githubusercontent.com/Its-Satyajit/phpv/main/phpv"
+  local temp_file="/tmp/phpv_update"
+
+  if curl -fsSL -o "$temp_file" "$update_url"; then
+      # Basic validation: check if it looks like a bash script
+      if grep -q "#!/bin/bash" "$temp_file"; then
+          print_info "Installing update..."
+          # cp preserves permissions, but let's be explicit about +x
+          cp "$temp_file" "$0"
+          chmod +x "$0"
+          print_success "PHPV has been updated to the latest version!"
+          rm -f "$temp_file"
+          exit 0
+      else
+          print_error "Downloaded file does not look like a valid script. Update aborted."
+          rm -f "$temp_file"
+          exit 1
+      fi
+  else
+      print_error "Failed to download update from GitHub."
+      exit 1
+  fi
+}
+
 # Function to build and install PHP version using makepkg
 build_and_install_php() {
   local version="$1"
@@ -301,6 +328,10 @@ while [[ $# -gt 0 ]]; do
       NO_CHECK="true"
       shift
       ;;
+    -u|--self-update)
+      action="self_update"
+      shift
+      ;;
     -*)
       print_error "Unknown magic spell: $1"
       exit 1
@@ -325,6 +356,7 @@ if [ -z "$action" ]; then
   print_info "  $0 -i <version> --nocheck    : Skip tests during build"
   print_info "  $0 -e <extension> <version>  : Install PHP extension (e.g., 'imagick 81')"
   print_info "  $0 <version>                 : Switch to PHP version"
+  print_info "  $0 -u, --self-update         : Update phpv to the latest version"
   print_info "  $0 -v                        : Show version"
   exit 1
 fi
@@ -338,6 +370,9 @@ install_or_update)
   ;;
 install_extension)
   install_extension "$extension" "$version"
+  ;;
+self_update)
+  self_update
   ;;
 switch)
   switch_php_version "$version"

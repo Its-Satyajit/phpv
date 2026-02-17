@@ -137,6 +137,14 @@ Replace `<version>` with the desired shorthand.
 
 ### Troubleshooting
 
+### Updates
+
+To update `phpv` to the latest version from the repository:
+
+```bash
+phpv --self-update
+```
+
 ### Troubleshooting
 
 #### c-client Dependency
