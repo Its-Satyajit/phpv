@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/Its-Satyajit/phpv/compare/phpv-v1.2.1...phpv-v1.3.0) (2026-02-17)
+
+
+### Features
+
+* **update:** Add self-update functionality to phpv ([20a6b24](https://github.com/Its-Satyajit/phpv/commit/20a6b24419fe14cf2ab5cb99d2b9edc71b1d6ada))
+
 ## [1.2.1](https://github.com/Its-Satyajit/phpv/compare/phpv-v1.2.0...phpv-v1.2.1) (2026-02-17)
 
 
